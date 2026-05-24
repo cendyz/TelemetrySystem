@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\arek\Desktop\telemetryAndVehicleFleetSystem\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\arek\Desktop\telemetryAndVehicleFleetSystem\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{E7D2A5D6-F8AE-34F5-9EB7-C498302F15CB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

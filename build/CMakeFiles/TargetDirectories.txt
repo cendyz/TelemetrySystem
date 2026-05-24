@@ -1,0 +1,3 @@
+C:/Users/arek/Desktop/telemetryAndVehicleFleetSystem/build/CMakeFiles/system.dir
+C:/Users/arek/Desktop/telemetryAndVehicleFleetSystem/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/arek/Desktop/telemetryAndVehicleFleetSystem/build/CMakeFiles/ZERO_CHECK.dir

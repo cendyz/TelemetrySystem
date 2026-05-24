@@ -1,0 +1,10 @@
+^C:\USERS\AREK\DESKTOP\TELEMETRYANDVEHICLEFLEETSYSTEM\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/arek/Desktop/telemetryAndVehicleFleetSystem -BC:/Users/arek/Desktop/telemetryAndVehicleFleetSystem/build --check-stamp-file C:/Users/arek/Desktop/telemetryAndVehicleFleetSystem/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
