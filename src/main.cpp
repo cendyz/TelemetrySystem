@@ -1,12 +1,7 @@
-#include <iostream>
-#include <print>
-#include "../include/GasolineCar.h"
+#include "System.h"
 
 int main() {
-    GasolineCar car;
-    GasolineCar::makeNoise();
-
-    std::println("cmake projekt");
+    System system;
 
     return 0;
 }
