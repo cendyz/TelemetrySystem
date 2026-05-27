@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 
 project(system)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -16,6 +17,8 @@ FetchContent_MakeAvailable(googletest)
 
 add_library(CoreLogic
         src/System.cpp
+        src/SystemUI.cpp
+        src/LanguageManager.cpp
 )
 target_include_directories(CoreLogic PUBLIC include)
 
@@ -26,7 +29,9 @@ enable_testing()
 include(GoogleTest)
 
 add_executable(tests
-        tests/testSystem.cpp
+        tests/tests_utils.cpp
 )
+
 target_link_libraries(tests PRIVATE GTest::gtest_main CoreLogic)
+target_link_libraries(CoreLogic PRIVATE GTest::gtest)
 gtest_discover_tests(tests)

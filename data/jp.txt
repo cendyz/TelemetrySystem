@@ -1,0 +1,2 @@
+SYSTEM;システム
+LOADING;ロード中。。。
