@@ -1,5 +1,6 @@
 #pragma once
 #include "LanguageManager.h"
+#include <array>
 #include <memory>
 #include <string>
 
@@ -9,6 +10,8 @@ public:
 
   ~SystemUI() = default;
 
+  void printInitializationMessages() const;
+  void printVehiclesFileIsEmpty() const;
 private:
   std::unique_ptr<LanguageManager> langManager;
 
@@ -22,6 +25,10 @@ private:
   [[nodiscard]] static bool itIsJapaneseLanguage();
 
   void setLanguage();
+
+  inline static constexpr std::array<std::string, 2> systems_k{"S_BOOT", "S_INFO"};
+  inline static constexpr std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
+
 
   void printLoad();
 };

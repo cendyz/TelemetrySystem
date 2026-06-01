@@ -4,8 +4,6 @@
 #include "LanguageManager.h"
 #include <iostream>
 #include <memory>
-#include <thread>
-#include <chrono>
 
 SystemUI::SystemUI() { setLanguage(); }
 
@@ -15,8 +13,6 @@ void SystemUI::setLanguage() {
   } else {
     langManager = std::make_unique<LanguageManager>(enLen);
   }
-
-  printLoad();
 }
 
 bool SystemUI::itIsJapaneseLanguage() { return getSystemLang() == jpLen; }
@@ -34,10 +30,23 @@ std::string SystemUI::getSystemLang() {
   }
 }
 
+void SystemUI::printInitializationMessages() const  {
+  for(size_t i{}; i < systems_k.size(); ++i) {
+      Utils::printMessageWithSpace(langManager->dictionary.at(systems_k[i]));
+      Utils::printColorfulMessage(langManager->dictionary.at(inits_k[i]), COLORS::CYAN);
+      Utils::pauseOutputForSec();
+  }
+}
+
 void SystemUI::printLoad() {
-    while(true) {
-        Utils::printMessageWithSpace("[" + langManager->dictionary.at("SYSTEM") + "]");
-        Utils::printColorfulMessage(langManager->dictionary.at("LOADING"), COLORS::YELLOW);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+  while (true) {
+    Utils::printMessageWithSpace("[" + langManager->dictionary.at("SYSTEM") +
+                                 "]");
+    Utils::printColorfulMessage(langManager->dictionary.at("LOADING"),
+                                COLORS::YELLOW);
+  }
+}
+
+void SystemUI::printVehiclesFileIsEmpty() const {
+    Utils::printColorfulMessage(langManager->dictionary.at("EMPTY"), COLORS::RED);
 }

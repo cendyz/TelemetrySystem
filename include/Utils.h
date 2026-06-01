@@ -1,11 +1,18 @@
 #pragma once
 #include "Colors.h"
+#include <cctype>
 #include <iostream>
 #include <regex>
 #include <string>
+#include <thread>
+#include <chrono>
 
 namespace Utils {
 inline static std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
+
+inline static void pauseOutputForSec() {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+}
 
 inline static void printMessageNewLine(std::string_view msg) {
     std::cout << msg << '\n';
@@ -25,7 +32,7 @@ inline void printColorfulMessage(std::string_view mess, std::string_view color) 
 
 inline void lowerString(std::string &text) {
   for (char &c : text) {
-    c = c | ' ';
+    c = std::tolower(c);
   }
 }
 
