@@ -38,15 +38,20 @@ void SystemUI::printInitializationMessages() const  {
   }
 }
 
-void SystemUI::printLoad() {
-  while (true) {
-    Utils::printMessageWithSpace("[" + langManager->dictionary.at("SYSTEM") +
-                                 "]");
-    Utils::printColorfulMessage(langManager->dictionary.at("LOADING"),
-                                COLORS::YELLOW);
-  }
-}
-
 void SystemUI::printVehiclesFileIsEmpty() const {
     Utils::printColorfulMessage(langManager->dictionary.at("EMPTY"), COLORS::RED);
+}
+
+void SystemUI::printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>> &vehicles, std::string_view electricCar) const {
+    for(auto &vehicle : vehicles) {
+        Utils::printMessageWithSpace(langManager->dictionary.at("S_INFO"));
+        if(vehicle->type != electricCar) {
+            Utils::printMessageWithSpace(langManager->dictionary.at("ADD_COMBUSTION"));
+            Utils::printColorfulMessage(vehicle->name, COLORS::BROWN);
+        } else {
+            Utils::printMessageWithSpace(langManager->dictionary.at("ADD_ELECTRIC"));
+            Utils::printColorfulMessage(vehicle->name, COLORS::GREEN);
+        }
+        Utils::pauseOutputForSec();
+    }
 }
