@@ -10,9 +10,9 @@ namespace fs = std::filesystem;
 
 LanguageManager::LanguageManager(std::string_view lang) {
   if (lang == jpDict) {
-    dictLang = jpDict;
+    dictLang = std::string(jpDict);
   } else {
-    dictLang = enDict;
+    dictLang = std::string(enDict);
   }
 
   if (isDictExists(dictLang)) {
@@ -24,7 +24,6 @@ LanguageManager::LanguageManager(std::string_view lang) {
 
 bool LanguageManager::isDictExists(const std::string &lang) {
   dictPath = dictsPath + lang + fileType;
-
   return fs::exists(dictPath);
 }
 
@@ -40,7 +39,7 @@ void LanguageManager::loadDict() {
     getline(ss, key, ';');
     getline(ss, value, ';');
 
-    dictionary.try_emplace(key, value);
+    dictionary.try_emplace(std::move(key), std::move(value));
   }
 }
 

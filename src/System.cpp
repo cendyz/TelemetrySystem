@@ -20,7 +20,7 @@ void System::run() {
   }
 
   loadVehiclesFromFile();
-  
+
   if (vehicles.empty()) {
     sysUI->printVehiclesFileIsEmpty();
     return;
