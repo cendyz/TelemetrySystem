@@ -9,7 +9,7 @@ public:
   bool isON{};
   std::string type;
 
-  Vehicle(const std::string &n, double eP, double f, const std::string &type)
-      : name(std::move(n)), fuel(f), enginePower(eP), type(std::move(type)) {}
+  Vehicle(const std::string &name, double fuel, double enginePower, const std::string &type)
+      : name(std::move(name)), fuel(fuel), enginePower(enginePower), type(std::move(type)) {}
   virtual ~Vehicle() = default;
 };

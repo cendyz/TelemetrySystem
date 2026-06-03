@@ -5,3 +5,5 @@ LANG_L;LanguageManagerを読み込んでいます。。。
 ADD_COMBUSTION;ガソリン車を追加しました:
 ADD_ELECTRIC;電気自動車を追加しました:
 EMPTY;車両ファイルが空です。いくつかの車両を追加してログ システムを開始します。
+TICK_START;=== シミュレーションチック:
+TICK_END;===:

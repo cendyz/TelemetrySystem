@@ -51,23 +51,24 @@ void System::readFileLine(const std::string &line) {
   getline(ss, fuel, ';');
   getline(ss, type, ';');
 
-  std::vector<std::string> vehicle{std::move(name), std::move(enginePower),
-                                   std::move(fuel), std::move(type)};
-  addVehicleToVar(vehicle);
-}
+  double d_engine{stod(enginePower)};
+  double d_fuel(stod(fuel));
 
-void System::addVehicleToVar(const std::vector<std::string> &vehicle) {
   std::unique_ptr<Vehicle> newVehicle;
-  double dEp{stod(vehicle[static_cast<int>(Info::EngineP)])};
-  double dF{stod(vehicle[static_cast<int>(Info::Fuel)])};
 
-  if (vehicle[static_cast<int>(Info::Type)] == electricCarType) {
-    newVehicle = std::make_unique<CombustionVehicle>(std::move(vehicle[static_cast<int>(Info::Name)]), dEp,
-                                            dF, std::move(vehicle[static_cast<int>(Info::Type)]));
+  if (type == electricCarType) {
+    newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_engine,
+                                                   d_fuel, std::move(type));
   } else {
-    newVehicle = std::make_unique<ElectricVehicle>(std::move(vehicle[static_cast<int>(Info::Name)]), dEp,
-                                        dF, std::move(vehicle[static_cast<int>(Info::Type)]));
+    newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_engine,
+                                                     d_fuel, std::move(type));
   }
 
-  vehicles.emplace_back(std::move(newVehicle));
+  addVehicleToVar(std::move(newVehicle));
+}
+
+void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle) {
+  if (vehicle) {
+    vehicles.emplace_back(std::move(vehicle));
+  }
 }

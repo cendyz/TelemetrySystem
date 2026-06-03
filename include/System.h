@@ -10,8 +10,6 @@ public:
   void run();
 
 private:
-  enum class Info { Name, EngineP, Fuel, Type };
-
   std::unique_ptr<SystemUI> sysUI;
   std::vector<std::unique_ptr<Vehicle>> vehicles;
 
@@ -23,5 +21,5 @@ private:
   void readFileLine(const std::string &line);
   static constexpr std::string_view electricCarType{"electric"};
 
-  void addVehicleToVar(const std::vector<std::string> &vehicle);
+  void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
 };
