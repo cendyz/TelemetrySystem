@@ -3,6 +3,7 @@
 
 class CombustionVehicle : public Vehicle {
 public:
-  using Vehicle::Vehicle;
-  ~CombustionVehicle() override = default;
+    using Vehicle::Vehicle;
+
+    ~CombustionVehicle() override = default;
 };

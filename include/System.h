@@ -1,4 +1,5 @@
 #pragma once
+#include <windows.h>
 #include "SystemUI.h"
 #include "Vehicle.h"
 #include <memory>
@@ -6,20 +7,27 @@
 
 class System {
 public:
-  System();
-  void run();
+    System();
+
+    void run();
 
 private:
-  std::unique_ptr<SystemUI> sysUI;
-  std::vector<std::unique_ptr<Vehicle>> vehicles;
+    std::unique_ptr<SystemUI> sysUI;
+    std::vector<std::unique_ptr<Vehicle> > vehicles;
 
-  inline static const std::string vehiclesPath{"../data/vehicles.csv"};
-  [[nodiscard]] static bool isVehiclesFileExists();
-  static void createVehiclesFile();
+    static constexpr std::string_view vehiclesPath{"../../data/vehicles.csv"};
 
-  void loadVehiclesFromFile();
-  void readFileLine(const std::string &line);
-  static constexpr std::string_view electricCarType{"electric"};
+    [[nodiscard]] static bool isVehiclesFileExists();
 
-  void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
+    static void createVehiclesFile();
+
+    void loadVehiclesFromFile();
+
+    void readFileLine(const std::string &line);
+
+    static constexpr std::string_view electricCarType{"electric"};
+
+    void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
+
+    void startSimulation();
 };

@@ -8,32 +8,41 @@
 
 class SystemUI {
 public:
-  SystemUI();
+    SystemUI();
 
-  ~SystemUI() = default;
+    ~SystemUI() = default;
 
-  void printInitializationMessages() const;
-  void printVehiclesFileIsEmpty() const;
-  void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>> &vehicles,
-                         std::string_view electricCar) const;
+    void printInitializationMessages() const;
+
+    void printVehiclesFileIsEmpty() const;
+
+    void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle> > &vehicles,
+                           std::string_view electricCar) const;
+
+    void printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj);
 
 private:
-  std::unique_ptr<LanguageManager> langManager;
+    std::unique_ptr<LanguageManager> langManager;
 
-  [[nodiscard]] static std::string getSystemLang();
-  static constexpr std::string_view choseLangInputMsg{
-      "Select the log display language (JP/EN): "};
-  static constexpr std::string_view jpLen{"jp"};
-  static constexpr std::string_view enLen{"en"};
+    [[nodiscard]] static std::string getSystemLang();
 
-  static constexpr std::string_view wrongLangInputMsg{"Invalid command."};
-  [[nodiscard]] static bool itIsJapaneseLanguage();
+    static constexpr std::string_view choseLangInputMsg{
+        "Select the log display language (JP/EN): "
+    };
+    static constexpr std::string_view jpLen{"jp"};
+    static constexpr std::string_view enLen{"en"};
 
-  void setLanguage();
+    static constexpr std::string_view wrongLangInputMsg{"Invalid command."};
 
-  inline static constexpr std::array<std::string, 2> systems_k{"S_BOOT",
-                                                               "S_INFO"};
-  inline static constexpr std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
+    [[nodiscard]] static bool itIsJapaneseLanguage();
 
+    void setLanguage();
 
+    inline static const std::array<std::string, 2> systems_k{
+        "S_BOOT",
+        "S_INFO"
+    };
+    inline static const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
+
+    int tickNum{1};
 };

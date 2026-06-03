@@ -3,6 +3,7 @@
 
 class ElectricVehicle : public Vehicle {
 public:
-  using Vehicle::Vehicle;
-  ~ElectricVehicle() override = default;
+    using Vehicle::Vehicle;
+
+    ~ElectricVehicle() override = default;
 };

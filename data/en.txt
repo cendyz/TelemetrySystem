@@ -7,3 +7,9 @@ ADD_ELECTRIC;Added electric vehicle:
 EMPTY;Vehicles file is empty. Add some vehicles to start log system.
 TICK_START;=== SIMULATION TICK:
 TICK_END;===:
+REST;(Resting State)
+TELEMETRY;[TELEMETRY]
+R_ARROW;->
+IS_RUN;is_running:
+E_TEMP;engine_temp:
+F_LEVEL;fuel_level_pct:

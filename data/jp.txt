@@ -1,9 +1,15 @@
-S_BOOT;[システム ブーツ]
+S_BOOT;『システム ブーツ』
 INIT;フリートマネージャーの初期化
-S_INFO;[システム インフォ]
+S_INFO;『システム インフォ』
 LANG_L;LanguageManagerを読み込んでいます。。。
 ADD_COMBUSTION;ガソリン車を追加しました:
 ADD_ELECTRIC;電気自動車を追加しました:
 EMPTY;車両ファイルが空です。いくつかの車両を追加してログ システムを開始します。
 TICK_START;=== シミュレーションチック:
-TICK_END;===:
+TICK_END;===
+REST;休止状態
+TELEMETRY;『遠隔測定』
+R_ARROW;->
+IS_RUN;実行中:
+E_TEMP;エンジン温度:
+F_LEVEL;燃料残量（％）:
