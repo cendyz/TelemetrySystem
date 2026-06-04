@@ -12,6 +12,8 @@ public:
 
     ~SystemUI() = default;
 
+    static constexpr std::string_view electricCarType{"electric"};
+
     void printInitializationMessages() const;
 
     void printVehiclesFileIsEmpty() const;
@@ -19,7 +21,9 @@ public:
     void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle> > &vehicles,
                            std::string_view electricCar) const;
 
-    void printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj);
+    void printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) const;
+
+    void printSimulationStartHeader();
 
 private:
     std::unique_ptr<LanguageManager> langManager;
@@ -45,4 +49,12 @@ private:
     inline static const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
 
     int tickNum{1};
+
+    void printCarNameInfo(const std::string &name, std::string_view color) const;
+
+    void printIsRunning(bool isOn) const;
+
+    void printEngineTemp(double temp) const;
+
+    void printFuel(double fuel) const;
 };

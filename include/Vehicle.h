@@ -5,13 +5,13 @@ class Vehicle {
 public:
     std::string name;
     double fuel{};
-    double enginePower;
+    double engineTemp{};
     std::string type;
     bool isON{};
 
 
-    Vehicle(const std::string &name, const double fuel, const double enginePower, const std::string &type)
-        : name(std::move(name)), fuel(fuel), enginePower(enginePower), type(std::move(type)) {
+    Vehicle(std::string name, const double fuel, std::string type)
+        : name(std::move(name)), fuel(fuel), type(std::move(type)) {
     }
 
     virtual ~Vehicle() = default;

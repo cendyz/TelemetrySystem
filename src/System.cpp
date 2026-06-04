@@ -9,7 +9,7 @@
 #include <memory>
 #include <sstream>
 #include <iostream>
-
+#include <csignal>
 #include "Utils.h"
 namespace fs = std::filesystem;
 
@@ -33,7 +33,7 @@ void System::run() {
         return;
     }
 
-    sysUI->printAddedVehicle(vehicles, electricCarType);
+    sysUI->printAddedVehicle(vehicles, SystemUI::electricCarType);
     startSimulation();
 }
 
@@ -52,24 +52,20 @@ void System::loadVehiclesFromFile() {
 
 void System::readFileLine(const std::string &line) {
     std::stringstream ss(line);
-    std::string name, enginePower, fuel, type;
+    std::string name, fuel, type;
 
     getline(ss, name, ';');
-    getline(ss, enginePower, ';');
     getline(ss, fuel, ';');
     getline(ss, type, ';');
 
-    double d_engine{stod(enginePower)};
-    double d_fuel(stod(fuel));
+    const double d_fuel(stod(fuel));
 
     std::unique_ptr<Vehicle> newVehicle;
 
-    if (type == electricCarType) {
-        newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_engine,
-                                                       d_fuel, std::move(type));
+    if (type == SystemUI::electricCarType) {
+        newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_fuel, std::move(type));
     } else {
-        newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_engine,
-                                                         d_fuel, std::move(type));
+        newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_fuel, std::move(type));
     }
 
     addVehicleToVar(std::move(newVehicle));
@@ -82,17 +78,29 @@ void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle) {
 }
 
 void System::startSimulation() {
-    std::cout << "\033[?25l";
-    std::cout << "\033[s";
+    signal(SIGINT, handleExit);
+
+    hideAndSaveCursorPosition();
 
     while (true) {
         std::cout << "\033[u\033[J";
-        for (auto &vehicle : vehicles) {
+        sysUI->printSimulationStartHeader();
+        for (auto &vehicle: vehicles) {
             sysUI->printTelemetricSimulation(vehicle);
         }
         std::cout.flush();
 
-        Utils::pauseOutputForSec();
+        Utils::pauseOutputForXSec(3);
     }
     std::cout << '\n';
+}
+
+void System::handleExit(const int signum) {
+    std::cout << "\033[?25h";
+    exit(signum);
+}
+
+void System::hideAndSaveCursorPosition() {
+    std::cout << "\033[?25l";
+    std::cout << "\033[s";
 }

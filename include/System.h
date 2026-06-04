@@ -25,9 +25,12 @@ private:
 
     void readFileLine(const std::string &line);
 
-    static constexpr std::string_view electricCarType{"electric"};
 
     void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
 
     void startSimulation();
+
+    static void handleExit(int signum);
+
+    static void hideAndSaveCursorPosition();
 };
