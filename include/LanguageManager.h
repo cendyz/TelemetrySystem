@@ -17,9 +17,8 @@ private:
 
     [[nodiscard]] bool isDictExists(const std::string &lang);
 
-    static constexpr std::string_view dictsPath{"../../data/"};
+    std::string dictsPath{"../data/"};
     static constexpr std::string_view fileType{".txt"};
-    std::string dictPath;
 
     void loadDict();
 

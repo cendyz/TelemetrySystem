@@ -13,3 +13,6 @@ R_ARROW;->
 IS_RUN;is_running:
 E_TEMP;engine_temp:
 F_LEVEL;fuel_level_pct:
+ALERT;[ALERT]
+WARNING;[WARNING]
+DANGER_TEMP;The engine temperature is dangerously high. Shutting down the engine...

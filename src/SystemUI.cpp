@@ -69,7 +69,6 @@ void SystemUI::printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) co
 }
 
 void SystemUI::printSimulationStartHeader() {
-    std::cout << '\n';
     Utils::printMessageWithSpace(langManager->dictionary["TICK_START"]);
     Utils::printMessageWithSpace(tickNum++);
     Utils::printMessageNewLine(langManager->dictionary["TICK_END"]);
@@ -93,9 +92,9 @@ void SystemUI::printIsRunning(const bool isOn) const {
 
 void SystemUI::printEngineTemp(const double temp) const {
     const std::string_view color{
-        (temp <= 105)
+        (temp <= normalEngTemp)
             ? COLORS::WHITE
-            : (temp > 115)
+            : (temp > dangerEngTemp)
                   ? COLORS::RED
                   : COLORS::L_YELLOW
     };
@@ -121,4 +120,9 @@ void SystemUI::printFuel(const double fuel) const {
         langManager->dictionary["F_LEVEL"]
     };
     Utils::printRow(label, fuel, color);
+}
+
+void SystemUI::printEngineWarning() const {
+    Utils::printMessageWithSpace(langManager->dictionary["WARNING"]);
+    Utils::printColorfulMessage(langManager->dictionary["DANGER_TEMP"], COLORS::RED);
 }

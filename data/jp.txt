@@ -13,3 +13,6 @@ R_ARROW;->
 IS_RUN;実行中:
 E_TEMP;エンジン温度:
 F_LEVEL;燃料残量（％）:
+ALERT;『警報』
+WARNING;『注意』
+DANGER_TEMP;エンジン温度が危険なほど高くなっています。エンジンを停止します...

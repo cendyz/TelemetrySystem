@@ -25,6 +25,11 @@ public:
 
     void printSimulationStartHeader();
 
+    static constexpr std::uint8_t normalEngTemp{105};
+    static constexpr std::uint8_t dangerEngTemp{115};
+
+    void printEngineWarning() const;
+
 private:
     std::unique_ptr<LanguageManager> langManager;
 
@@ -57,4 +62,6 @@ private:
     void printEngineTemp(double temp) const;
 
     void printFuel(double fuel) const;
+
+
 };

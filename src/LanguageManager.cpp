@@ -5,11 +5,10 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
-#include <iostream>
-
 namespace fs = std::filesystem;
 
 LanguageManager::LanguageManager(const std::string_view lang) {
+    Utils::checkOS(dictsPath);
     if (lang == jpDict) {
         dictLang = std::string(jpDict);
     } else {
@@ -23,12 +22,12 @@ LanguageManager::LanguageManager(const std::string_view lang) {
 }
 
 bool LanguageManager::isDictExists(const std::string &lang) {
-    dictPath = dictsPath.data() + lang + fileType.data();
-    return fs::exists(dictPath);
+    dictsPath += lang + fileType.data();
+    return fs::exists(dictsPath);
 }
 
 void LanguageManager::loadDict() {
-    std::ifstream dict{dictPath};
+    std::ifstream dict{dictsPath};
 
     std::string line;
     std::string key;

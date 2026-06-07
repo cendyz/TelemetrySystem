@@ -1,6 +1,6 @@
 #pragma once
+
 #include "Colors.h"
-#include <cctype>
 #include <chrono>
 #include <iostream>
 #include <regex>
@@ -9,6 +9,12 @@
 
 namespace Utils {
     inline static std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
+
+    inline void checkOS(std::string & pathToCorrect) {
+#ifdef _WIN32
+        pathToCorrect = "../" + pathToCorrect;
+#endif
+    }
 
     inline void pauseOutputForXSec(int &&sec) {
         std::this_thread::sleep_for(std::chrono::seconds(sec));
@@ -34,7 +40,7 @@ namespace Utils {
 
     inline void lowerString(std::string &text) {
         for (char &c: text) {
-            c = tolower(c);
+            c = std::tolower(static_cast<unsigned char>(c));
         }
     }
 
@@ -42,8 +48,8 @@ namespace Utils {
         return std::regex_match(input, langInputRegex);
     }
 
-    template <typename T>
-    static void printRow(const std::string &label, const T& value, const std::string_view color) {
+    template<typename T>
+    static void printRow(const std::string &label, const T &value, const std::string_view color) {
         std::cout << std::right << std::setw(20) << label;
         std::cout << color;
         std::cout << std::right << std::setw(6) << value;

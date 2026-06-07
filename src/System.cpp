@@ -1,5 +1,7 @@
-#include <windows.h>
 #include "../include/System.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include "ElectricVehicle.h"
 #include "Vehicle.h"
 #include <CombustionVehicle.h>
@@ -14,6 +16,7 @@
 namespace fs = std::filesystem;
 
 System::System() {
+    Utils::checkOS(vehiclesPath);
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 }
@@ -37,9 +40,9 @@ void System::run() {
     startSimulation();
 }
 
-bool System::isVehiclesFileExists() { return fs::exists(vehiclesPath); }
+bool System::isVehiclesFileExists() const { return fs::exists(vehiclesPath); }
 
-void System::createVehiclesFile() { std::ofstream file(vehiclesPath.data()); }
+void System::createVehiclesFile() const { std::ofstream file(vehiclesPath); }
 
 void System::loadVehiclesFromFile() {
     std::ifstream file{std::string(vehiclesPath)};
@@ -84,15 +87,14 @@ void System::startSimulation() {
 
     while (true) {
         std::cout << "\033[u\033[J";
+        std::cout << '\n';
         sysUI->printSimulationStartHeader();
         for (auto &vehicle: vehicles) {
             sysUI->printTelemetricSimulation(vehicle);
         }
         std::cout.flush();
-
         Utils::pauseOutputForXSec(3);
     }
-    std::cout << '\n';
 }
 
 void System::handleExit(const int signum) {
@@ -103,4 +105,13 @@ void System::handleExit(const int signum) {
 void System::hideAndSaveCursorPosition() {
     std::cout << "\033[?25l";
     std::cout << "\033[s";
+}
+
+bool System::isOKToStartVehicle(const double engTemp, bool &engIsOn) {
+    if (engTemp > sysUI->dangerEngTemp) {
+        if (engIsOn) {
+            engIsOn = false;
+            sysUI->printEngineWarning();
+        }
+    }
 }

@@ -1,5 +1,4 @@
 #pragma once
-#include <windows.h>
 #include "SystemUI.h"
 #include "Vehicle.h"
 #include <memory>
@@ -15,16 +14,15 @@ private:
     std::unique_ptr<SystemUI> sysUI;
     std::vector<std::unique_ptr<Vehicle> > vehicles;
 
-    static constexpr std::string_view vehiclesPath{"../../data/vehicles.csv"};
+    std::string vehiclesPath{"../data/vehicles.csv"};
 
-    [[nodiscard]] static bool isVehiclesFileExists();
+    [[nodiscard]] bool isVehiclesFileExists() const;
 
-    static void createVehiclesFile();
+    void createVehiclesFile() const;
 
     void loadVehiclesFromFile();
 
     void readFileLine(const std::string &line);
-
 
     void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
 
@@ -33,4 +31,6 @@ private:
     static void handleExit(int signum);
 
     static void hideAndSaveCursorPosition();
+
+    [[nodiscard]] bool isOKToStartVehicle(double engTemp, bool &engIsOn);
 };
