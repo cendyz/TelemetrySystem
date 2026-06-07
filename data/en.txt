@@ -16,3 +16,4 @@ F_LEVEL;fuel_level_pct:
 ALERT;[ALERT]
 WARNING;[WARNING]
 DANGER_TEMP;The engine temperature is dangerously high. Shutting down the engine...
+RUN;(Active State)

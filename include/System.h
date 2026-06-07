@@ -32,5 +32,9 @@ private:
 
     static void hideAndSaveCursorPosition();
 
-    [[nodiscard]] bool isOKToStartVehicle(double engTemp, bool &engIsOn);
+    void isOKToStartVehicle(double engTemp, bool &engIsOn, double fuel) const;
+
+    void warmingCollingUpTheEngine(double &engTemp, const std::string &type, bool isOn) const;
+
+    static void updateFuel(double &fuel, bool& engineIsOn);
 };

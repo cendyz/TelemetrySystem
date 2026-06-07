@@ -52,7 +52,7 @@ namespace Utils {
     static void printRow(const std::string &label, const T &value, const std::string_view color) {
         std::cout << std::right << std::setw(20) << label;
         std::cout << color;
-        std::cout << std::right << std::setw(6) << value;
+        std::cout << std::right << std::setw(7) << value;
         std::cout << COLORS::RESET << '\n';
     }
 } // namespace Utils

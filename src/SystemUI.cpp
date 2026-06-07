@@ -62,7 +62,7 @@ void SystemUI::printAddedVehicle(
 
 void SystemUI::printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) const {
     const std::string_view color{(obj->type == electricCarType) ? COLORS::BLU : COLORS::MAGNETA};
-    printCarNameInfo(obj->name, color);
+    printCarNameInfo(obj->name, color, obj->isON, obj->fuel);
     printIsRunning(obj->isON);
     printEngineTemp(obj->engineTemp);
     printFuel(obj->fuel);
@@ -74,10 +74,15 @@ void SystemUI::printSimulationStartHeader() {
     Utils::printMessageNewLine(langManager->dictionary["TICK_END"]);
 }
 
-void SystemUI::printCarNameInfo(const std::string &name, const std::string_view color) const {
+void SystemUI::printCarNameInfo(const std::string &name, const std::string_view color,
+                                const bool &isOn, const double fuel) const {
     Utils::printMessageWithSpace(langManager->dictionary["TELEMETRY"]);
-    std::cout << color << name << COLORS::RESET << " " <<
-            langManager->dictionary["REST"] << ":" << '\n';
+    std::cout << color << name << COLORS::RESET << " ";
+    if (isOn && fuel > 0) {
+        std::cout << langManager->dictionary["RUN"] << ":" << '\n';
+    } else {
+        std::cout << langManager->dictionary["REST"] << ":" << '\n';
+    }
 }
 
 void SystemUI::printIsRunning(const bool isOn) const {
@@ -102,6 +107,7 @@ void SystemUI::printEngineTemp(const double temp) const {
         langManager->dictionary["R_ARROW"] + " " +
         langManager->dictionary["E_TEMP"]
     };
+    std::cout << std::fixed << std::setprecision(2);
     Utils::printRow(label, temp, color);
 }
 
@@ -115,6 +121,7 @@ void SystemUI::printFuel(const double fuel) const {
                         ? COLORS::GREEN
                         : COLORS::WHITE
     };
+
     const std::string label{
         langManager->dictionary["R_ARROW"] + " " +
         langManager->dictionary["F_LEVEL"]

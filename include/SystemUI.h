@@ -55,13 +55,11 @@ private:
 
     int tickNum{1};
 
-    void printCarNameInfo(const std::string &name, std::string_view color) const;
+    void printCarNameInfo(const std::string &name, std::string_view color, const bool &isOn, double fuel) const;
 
     void printIsRunning(bool isOn) const;
 
     void printEngineTemp(double temp) const;
 
     void printFuel(double fuel) const;
-
-
 };

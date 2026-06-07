@@ -6,6 +6,7 @@
 #include "Vehicle.h"
 #include <CombustionVehicle.h>
 #include <ElectricVehicle.h>
+#include <random>
 #include <filesystem>
 #include <fstream>
 #include <memory>
@@ -89,11 +90,22 @@ void System::startSimulation() {
         std::cout << "\033[u\033[J";
         std::cout << '\n';
         sysUI->printSimulationStartHeader();
+
         for (auto &vehicle: vehicles) {
             sysUI->printTelemetricSimulation(vehicle);
+            std::cout << '\n';
+            isOKToStartVehicle(vehicle->engineTemp, vehicle->isON, vehicle->fuel);
+
+            if (!vehicle->isON || vehicle->engineTemp <= sysUI->normalEngTemp) {
+                warmingCollingUpTheEngine(vehicle->engineTemp, vehicle->type, vehicle->isON);
+            }
+            if (vehicle->fuel > 0) {
+            updateFuel(vehicle->fuel, vehicle->isON);
+            }
         }
+
         std::cout.flush();
-        Utils::pauseOutputForXSec(3);
+        Utils::pauseOutputForXSec(2);
     }
 }
 
@@ -107,11 +119,44 @@ void System::hideAndSaveCursorPosition() {
     std::cout << "\033[s";
 }
 
-bool System::isOKToStartVehicle(const double engTemp, bool &engIsOn) {
-    if (engTemp > sysUI->dangerEngTemp) {
+void System::isOKToStartVehicle(const double engTemp, bool &engIsOn, const double fuel) const {
+    if (engTemp > SystemUI::dangerEngTemp) {
         if (engIsOn) {
             engIsOn = false;
             sysUI->printEngineWarning();
         }
+    } else if (!engIsOn && engTemp < SystemUI::dangerEngTemp && fuel > 0) {
+        engIsOn = true;
+    }
+}
+
+void System::warmingCollingUpTheEngine(double &engTemp, const std::string &type, const bool isOn) const {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(3, 18);
+    std::uniform_real_distribution<> dist2(1, 10);
+    if (isOn) {
+        if (type == sysUI->electricCarType) {
+            engTemp += dist(gen);
+        } else {
+            engTemp += (dist(gen) + dist2(gen)) / 3;
+        }
+    } else if (engTemp > 0) {
+        engTemp -= (dist(gen) + dist2(gen)) / 3;
+        if (engTemp < 0) {
+            engTemp = 0;
+        }
+    }
+}
+
+void System::updateFuel(double &fuel, bool &engineIsOn) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dist(0,3);
+    fuel -= dist(gen);
+
+    if (fuel < 0) {
+        fuel = 0;
+        engineIsOn = false;
     }
 }
