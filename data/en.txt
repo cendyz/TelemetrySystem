@@ -1,6 +1,6 @@
-S_BOOT;[SYSTEM BOOT]
+S_BOOT;SYSTEM BOOT
 INIT;Fleet Manager initialization
-S_INFO;[SYSTEM INFO]
+S_INFO;SYSTEM INFO
 LANG_L;Loading LanguageManager...
 ADD_COMBUSTION;Added combustion vehicle:
 ADD_ELECTRIC;Added electric vehicle:
@@ -13,7 +13,14 @@ R_ARROW;->
 IS_RUN;is_running:
 E_TEMP;engine_temp:
 F_LEVEL;fuel_level_pct:
-ALERT;[ALERT]
-WARNING;[WARNING]
-DANGER_TEMP;The engine temperature is dangerously high. Shutting down the engine...
 RUN;(Active State)
+ALERT;ALERT
+INFO;INFO
+WARNING;WARNING
+DANGER_TEMP;The engine temperature is dangerously high. Starting cooling...
+WARNING_TEMP;Engine temperature has reached a high level.
+MEDIUM_FUEL;Fuel level is moderate
+LOW_FUEL_COMB;Very low fuel level, refuel the car!
+LOW_FUEL_ELE;Very low fuel level, charge the car!
+NO_FUEL;Out of fuel in the car!
+FINE;Everything is fine!

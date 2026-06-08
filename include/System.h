@@ -26,15 +26,23 @@ private:
 
     void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
 
-    void startSimulation();
+    void startSimulation() const;
 
     static void handleExit(int signum);
 
     static void hideAndSaveCursorPosition();
 
-    void isOKToStartVehicle(double engTemp, bool &engIsOn, double fuel) const;
+    static void isOKToStartVehicle(double engTemp, bool &engIsOn, double fuel);
 
-    void warmingCollingUpTheEngine(double &engTemp, const std::string &type, bool isOn) const;
+    [[nodiscard]] static double warmingRestingNumGenerator(const std::string &type);
 
-    static void updateFuel(double &fuel, bool& engineIsOn);
+    static void warmingUpTheEngine(double &engTemp, const std::string &type);
+
+    static void restingDownTheEngine(double &engTemp, const std::string &type);
+
+    static void updateFuel(double &fuel, bool &engineIsOn);
+
+    static void engineTemperatureMaintenance(double &engTemp);
+
+    static void collingCriticEngineTemp(double &engTemp);
 };

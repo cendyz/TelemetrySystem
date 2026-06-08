@@ -26,35 +26,38 @@ std::string SystemUI::getSystemLang() {
             Utils::lowerString(input);
             return input;
         }
-        Utils::printColorfulMessage(wrongLangInputMsg, COLORS::RED);
+        Utils::printColorfulMessageNewLine(wrongLangInputMsg, COLORS::RED);
     }
 }
 
 void SystemUI::printInitializationMessages() const {
     for (size_t i{}; i < systems_k.size(); ++i) {
-        Utils::printMessageWithSpace(langManager->dictionary.at(systems_k[i]));
-        Utils::printColorfulMessage(langManager->dictionary.at(inits_k[i]),
-                                    COLORS::YELLOW);
+        Utils::printMessage("[");
+        Utils::printColorfulMessage(langManager->dictionary.at(systems_k[i]), COLORS::YELLOW);
+        Utils::printMessage("] ");
+        Utils::printMessageNewLine(langManager->dictionary.at(inits_k[i]));
         Utils::pauseOutputForXSec(1);
     }
 }
 
 void SystemUI::printVehiclesFileIsEmpty() const {
-    Utils::printColorfulMessage(langManager->dictionary["EMPTY"], COLORS::RED);
+    Utils::printColorfulMessageNewLine(langManager->dictionary["EMPTY"], COLORS::RED);
 }
 
 void SystemUI::printAddedVehicle(
     const std::vector<std::unique_ptr<Vehicle> > &vehicles,
     const std::string_view electricCar) const {
     for (auto &vehicle: vehicles) {
-        Utils::printMessageWithSpace(langManager->dictionary["S_INFO"]);
+        std::cout << "[";
+        Utils::printColorfulMessage(langManager->dictionary["S_INFO"], COLORS::YELLOW);
+        std::cout <<"] ";
         if (vehicle->type != electricCar) {
             Utils::printMessageWithSpace(
                 langManager->dictionary["ADD_COMBUSTION"]);
-            Utils::printColorfulMessage(vehicle->name, COLORS::BLU);
+            Utils::printColorfulMessageNewLine(vehicle->name, COLORS::BLU);
         } else {
             Utils::printMessageWithSpace(langManager->dictionary["ADD_ELECTRIC"]);
-            Utils::printColorfulMessage(vehicle->name, COLORS::MAGNETA);
+            Utils::printColorfulMessageNewLine(vehicle->name, COLORS::MAGNETA);
         }
         Utils::pauseOutputForXSec(1);
     }
@@ -66,12 +69,14 @@ void SystemUI::printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) co
     printIsRunning(obj->isON);
     printEngineTemp(obj->engineTemp);
     printFuel(obj->fuel);
+    std::cout << '\n';
 }
 
 void SystemUI::printSimulationStartHeader() {
     Utils::printMessageWithSpace(langManager->dictionary["TICK_START"]);
     Utils::printMessageWithSpace(tickNum++);
     Utils::printMessageNewLine(langManager->dictionary["TICK_END"]);
+    std::cout << '\n';
 }
 
 void SystemUI::printCarNameInfo(const std::string &name, const std::string_view color,
@@ -97,9 +102,9 @@ void SystemUI::printIsRunning(const bool isOn) const {
 
 void SystemUI::printEngineTemp(const double temp) const {
     const std::string_view color{
-        (temp <= normalEngTemp)
+        (temp <= warningEngTemp)
             ? COLORS::WHITE
-            : (temp > dangerEngTemp)
+            : (temp >= dangerEngTemp)
                   ? COLORS::RED
                   : COLORS::L_YELLOW
     };
@@ -113,11 +118,11 @@ void SystemUI::printEngineTemp(const double temp) const {
 
 void SystemUI::printFuel(const double fuel) const {
     const std::string_view color{
-        (fuel <= 20)
+        (fuel <= lowFuel)
             ? COLORS::RED
-            : (fuel > 20 && fuel <= 40)
+            : (fuel > mediumFuel && fuel <= mediumFuel)
                   ? COLORS::L_YELLOW
-                  : (fuel >= 75)
+                  : (fuel >= highFuel)
                         ? COLORS::GREEN
                         : COLORS::WHITE
     };
@@ -130,6 +135,47 @@ void SystemUI::printFuel(const double fuel) const {
 }
 
 void SystemUI::printEngineWarning() const {
-    Utils::printMessageWithSpace(langManager->dictionary["WARNING"]);
-    Utils::printColorfulMessage(langManager->dictionary["DANGER_TEMP"], COLORS::RED);
+    std::cout << "[";
+    Utils::printColorfulMessage(langManager->dictionary["WARNING"], COLORS::YELLOW);
+    std::cout << "] ";
+    Utils::printMessageNewLine(langManager->dictionary["WARNING_TEMP"]);
+}
+
+void SystemUI::printEngineDanger() const {
+    std::cout << "[";
+    Utils::printColorfulMessage(langManager->dictionary["ALERT"], COLORS::RED);
+    std::cout << "] ";
+    Utils::printMessageNewLine(langManager->dictionary["DANGER_TEMP"]);
+}
+
+void SystemUI::printMediumFuelLevel() const {
+    std::cout << "[";
+    Utils::printColorfulMessage(langManager->dictionary["WARNING"], COLORS::YELLOW);
+    std::cout << "] ";
+    Utils::printMessageNewLine(langManager->dictionary["MEDIUM_FUEL"]);
+}
+
+void SystemUI::printLowFuelLevel(const std::string &type) const {
+    std::cout << "[";
+    Utils::printColorfulMessage(langManager->dictionary["ALERT"], COLORS::RED);
+    std::cout << "] ";
+    if (type == electricCarType) {
+        Utils::printMessageNewLine(langManager->dictionary["LOW_FUEL_ELE"]);
+    } else {
+        Utils::printMessageNewLine(langManager->dictionary["LOW_FUEL_COMB"]);
+    }
+}
+
+void SystemUI::printNoFuel() const {
+    std::cout << "[";
+    Utils::printColorfulMessage(langManager->dictionary["INFO"], COLORS::RED);
+    std::cout << "] ";
+    Utils::printMessageNewLine(langManager->dictionary["NO_FUEL"]);
+}
+
+void SystemUI::pritnAllOkInfo() const {
+    std::cout << "[";
+    Utils::printColorfulMessage(langManager->dictionary["INFO"], COLORS::GREEN);
+    std::cout << "] ";
+    Utils::printMessageNewLine(langManager->dictionary["FINE"]);
 }

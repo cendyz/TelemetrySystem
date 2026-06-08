@@ -17,6 +17,9 @@ public:
     void printInitializationMessages() const;
 
     void printVehiclesFileIsEmpty() const;
+    static constexpr std::uint8_t lowFuel{20};
+    static constexpr std::uint8_t mediumFuel{40};
+    static constexpr std::uint8_t highFuel{70};
 
     void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle> > &vehicles,
                            std::string_view electricCar) const;
@@ -25,10 +28,18 @@ public:
 
     void printSimulationStartHeader();
 
-    static constexpr std::uint8_t normalEngTemp{105};
+    static constexpr std::uint8_t warmedUpEngineTemp{80};
+    static constexpr std::uint8_t warningEngTemp{105};
     static constexpr std::uint8_t dangerEngTemp{115};
 
     void printEngineWarning() const;
+    void printEngineDanger() const;
+
+    void printMediumFuelLevel() const;
+    void printLowFuelLevel(const std::string &type) const;
+    void printNoFuel() const;
+
+    void pritnAllOkInfo() const;
 
 private:
     std::unique_ptr<LanguageManager> langManager;
@@ -62,4 +73,5 @@ private:
     void printEngineTemp(double temp) const;
 
     void printFuel(double fuel) const;
+
 };

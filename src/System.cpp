@@ -81,7 +81,7 @@ void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle) {
     }
 }
 
-void System::startSimulation() {
+void System::startSimulation() const {
     signal(SIGINT, handleExit);
 
     hideAndSaveCursorPosition();
@@ -90,18 +90,54 @@ void System::startSimulation() {
         std::cout << "\033[u\033[J";
         std::cout << '\n';
         sysUI->printSimulationStartHeader();
+        std::uint8_t isAllOK{1};
 
         for (auto &vehicle: vehicles) {
             sysUI->printTelemetricSimulation(vehicle);
-            std::cout << '\n';
             isOKToStartVehicle(vehicle->engineTemp, vehicle->isON, vehicle->fuel);
 
-            if (!vehicle->isON || vehicle->engineTemp <= sysUI->normalEngTemp) {
-                warmingCollingUpTheEngine(vehicle->engineTemp, vehicle->type, vehicle->isON);
+            if (vehicle->engineTemp >= SystemUI::dangerEngTemp) {
+                --isAllOK;
+                sysUI->printEngineDanger();
+            } else if (vehicle->engineTemp >= SystemUI::warningEngTemp) {
+                --isAllOK;
+                sysUI->printEngineWarning();
             }
+
+            if (vehicle->fuel <= 0) {
+                --isAllOK;
+                sysUI->printNoFuel();
+            } else if (vehicle->fuel <= SystemUI::lowFuel) {
+                --isAllOK;
+                sysUI->printLowFuelLevel(vehicle->type);
+            } else if (vehicle->fuel == 0 || vehicle->fuel <= SystemUI::mediumFuel) {
+                --isAllOK;
+                sysUI->printMediumFuelLevel();
+            }
+
+            if (vehicle->isON) {
+                if (vehicle->engineTemp <= SystemUI::warmedUpEngineTemp) {
+                    warmingUpTheEngine(vehicle->engineTemp, vehicle->type);
+                } else if (vehicle->engineTemp >= SystemUI::dangerEngTemp) {
+                    collingCriticEngineTemp(vehicle->engineTemp);
+                } else if (vehicle->engineTemp >= SystemUI::warmedUpEngineTemp && vehicle->engineTemp <=
+                           SystemUI::dangerEngTemp) {
+                    engineTemperatureMaintenance(vehicle->engineTemp);
+                }
+            } else if (!vehicle->isON && vehicle->engineTemp >= 0) {
+                restingDownTheEngine(vehicle->engineTemp, vehicle->type);
+            }
+
+
             if (vehicle->fuel > 0) {
-            updateFuel(vehicle->fuel, vehicle->isON);
+                updateFuel(vehicle->fuel, vehicle->isON);
             }
+
+            if (isAllOK == 1) {
+                sysUI->pritnAllOkInfo();
+            }
+            isAllOK = 1;
+            std::cout << '\n';
         }
 
         std::cout.flush();
@@ -119,43 +155,72 @@ void System::hideAndSaveCursorPosition() {
     std::cout << "\033[s";
 }
 
-void System::isOKToStartVehicle(const double engTemp, bool &engIsOn, const double fuel) const {
-    if (engTemp > SystemUI::dangerEngTemp) {
-        if (engIsOn) {
-            engIsOn = false;
-            sysUI->printEngineWarning();
-        }
-    } else if (!engIsOn && engTemp < SystemUI::dangerEngTemp && fuel > 0) {
+void System::isOKToStartVehicle(const double engTemp, bool &engIsOn, const double fuel) {
+    if (!engIsOn && engTemp < SystemUI::dangerEngTemp && fuel > 0) {
         engIsOn = true;
     }
 }
 
-void System::warmingCollingUpTheEngine(double &engTemp, const std::string &type, const bool isOn) const {
+
+double System::warmingRestingNumGenerator(const std::string &type) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(3, 18);
-    std::uniform_real_distribution<> dist2(1, 10);
-    if (isOn) {
-        if (type == sysUI->electricCarType) {
-            engTemp += dist(gen);
-        } else {
-            engTemp += (dist(gen) + dist2(gen)) / 3;
-        }
-    } else if (engTemp > 0) {
-        engTemp -= (dist(gen) + dist2(gen)) / 3;
-        if (engTemp < 0) {
-            engTemp = 0;
-        }
+    std::uniform_real_distribution<> dist1(3, 18);
+    std::uniform_real_distribution<> dist2(2, 13);
+    if (type == SystemUI::electricCarType) {
+        return dist1(gen);
     }
+    return (dist1(gen) + dist2(gen)) / 2;
+}
+
+void System::warmingUpTheEngine(double &engTemp, const std::string &type) {
+    engTemp += warmingRestingNumGenerator(type);
+}
+
+void System::restingDownTheEngine(double &engTemp, const std::string &type) {
+    engTemp -= warmingRestingNumGenerator(type);
+
+    if (engTemp <= 0) {
+        engTemp = 0;
+    }
+}
+
+void System::engineTemperatureMaintenance(double &engTemp) {
+    static std::uint8_t plusMinus{};
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dist(0, 15);
+
+    const double chanceOfCriticalTemperature{dist(gen)};
+
+    if (!plusMinus) {
+        if (chanceOfCriticalTemperature >= 10) {
+            engTemp += dist(gen) + 40;
+        } else {
+            engTemp += dist(gen);
+        }
+        plusMinus = 1;
+    } else {
+        engTemp -= dist(gen);
+        plusMinus = 0;
+    }
+}
+
+void System::collingCriticEngineTemp(double &engTemp) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dist(5, 15);
+
+    engTemp -= dist(gen);
 }
 
 void System::updateFuel(double &fuel, bool &engineIsOn) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist(0,3);
+    std::uniform_real_distribution<> dist(0, 2);
     fuel -= dist(gen);
 
-    if (fuel < 0) {
+    if (fuel <= 0) {
         fuel = 0;
         engineIsOn = false;
     }

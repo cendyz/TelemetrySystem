@@ -33,9 +33,15 @@ namespace Utils {
     }
 
     template<typename T>
-    static void printColorfulMessage(const T &mess,
+    static void printColorfulMessageNewLine(const T &mess,
                                      const std::string_view color) {
         std::cout << color << mess << COLORS::RESET << '\n';
+    }
+
+    template<typename T>
+    static void printColorfulMessage(const T &mess,
+                                     const std::string_view color) {
+        std::cout << color << mess << COLORS::RESET;
     }
 
     inline void lowerString(std::string &text) {
