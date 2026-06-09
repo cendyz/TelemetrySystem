@@ -17,6 +17,7 @@ public:
     void printInitializationMessages() const;
 
     void printVehiclesFileIsEmpty() const;
+    static constexpr std::uint8_t outOfFuel{};
     static constexpr std::uint8_t lowFuel{20};
     static constexpr std::uint8_t mediumFuel{40};
     static constexpr std::uint8_t highFuel{70};
@@ -28,9 +29,12 @@ public:
 
     void printSimulationStartHeader();
 
+    static constexpr std::uint8_t cooledEngineTemperature{};
     static constexpr std::uint8_t warmedUpEngineTemp{80};
     static constexpr std::uint8_t warningEngTemp{105};
     static constexpr std::uint8_t dangerEngTemp{115};
+
+    [[nodiscard]] std::string getArrowMsg(const std::string & msg) const;
 
     void printEngineWarning() const;
     void printEngineDanger() const;

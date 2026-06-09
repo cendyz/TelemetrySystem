@@ -16,10 +16,19 @@
 #include "Utils.h"
 namespace fs = std::filesystem;
 
+constexpr std::string_view getOSname() {
+#if defined(_WIN32)
+    return "windows";
+#else
+    return "linux";
+#endif
+}
+
 System::System() {
-    Utils::checkOS(vehiclesPath);
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
+    if (getOSname() == "windows") {
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+    }
 }
 
 void System::run() {
@@ -87,8 +96,7 @@ void System::startSimulation() const {
     hideAndSaveCursorPosition();
 
     while (true) {
-        std::cout << "\033[u\033[J";
-        std::cout << '\n';
+        cursorBackAndCleaningBottom();
         sysUI->printSimulationStartHeader();
         std::uint8_t isAllOK{1};
 
@@ -104,13 +112,13 @@ void System::startSimulation() const {
                 sysUI->printEngineWarning();
             }
 
-            if (vehicle->fuel <= 0) {
+            if (vehicle->fuel <= SystemUI::outOfFuel) {
                 --isAllOK;
                 sysUI->printNoFuel();
             } else if (vehicle->fuel <= SystemUI::lowFuel) {
                 --isAllOK;
                 sysUI->printLowFuelLevel(vehicle->type);
-            } else if (vehicle->fuel == 0 || vehicle->fuel <= SystemUI::mediumFuel) {
+            } else if (vehicle->fuel == SystemUI::outOfFuel || vehicle->fuel <= SystemUI::mediumFuel) {
                 --isAllOK;
                 sysUI->printMediumFuelLevel();
             }
@@ -120,16 +128,15 @@ void System::startSimulation() const {
                     warmingUpTheEngine(vehicle->engineTemp, vehicle->type);
                 } else if (vehicle->engineTemp >= SystemUI::dangerEngTemp) {
                     collingCriticEngineTemp(vehicle->engineTemp);
-                } else if (vehicle->engineTemp >= SystemUI::warmedUpEngineTemp && vehicle->engineTemp <=
-                           SystemUI::dangerEngTemp) {
+                } else if (vehicle->engineTemp >= SystemUI::warmedUpEngineTemp) {
                     engineTemperatureMaintenance(vehicle->engineTemp);
                 }
-            } else if (!vehicle->isON && vehicle->engineTemp >= 0) {
+            } else if (!vehicle->isON && vehicle->engineTemp >= SystemUI::cooledEngineTemperature) {
                 restingDownTheEngine(vehicle->engineTemp, vehicle->type);
             }
 
 
-            if (vehicle->fuel > 0) {
+            if (vehicle->fuel > SystemUI::outOfFuel) {
                 updateFuel(vehicle->fuel, vehicle->isON);
             }
 
@@ -155,14 +162,17 @@ void System::hideAndSaveCursorPosition() {
     std::cout << "\033[s";
 }
 
+void System::cursorBackAndCleaningBottom() {
+    std::cout << "\033[u\033[J";
+}
+
 void System::isOKToStartVehicle(const double engTemp, bool &engIsOn, const double fuel) {
-    if (!engIsOn && engTemp < SystemUI::dangerEngTemp && fuel > 0) {
+    if (!engIsOn && engTemp < SystemUI::dangerEngTemp && fuel > SystemUI::outOfFuel) {
         engIsOn = true;
     }
 }
 
-
-double System::warmingRestingNumGenerator(const std::string &type) {
+double System::getRandomTemperature(const std::string &type) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dist1(3, 18);
@@ -174,14 +184,14 @@ double System::warmingRestingNumGenerator(const std::string &type) {
 }
 
 void System::warmingUpTheEngine(double &engTemp, const std::string &type) {
-    engTemp += warmingRestingNumGenerator(type);
+    engTemp += getRandomTemperature(type);
 }
 
 void System::restingDownTheEngine(double &engTemp, const std::string &type) {
-    engTemp -= warmingRestingNumGenerator(type);
+    engTemp -= getRandomTemperature(type);
 
-    if (engTemp <= 0) {
-        engTemp = 0;
+    if (engTemp <= SystemUI::cooledEngineTemperature) {
+        engTemp = SystemUI::cooledEngineTemperature;
     }
 }
 
@@ -189,19 +199,23 @@ void System::engineTemperatureMaintenance(double &engTemp) {
     static std::uint8_t plusMinus{};
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist(0, 15);
+    std::uniform_real_distribution<> newTemp(1, 7);
 
-    const double chanceOfCriticalTemperature{dist(gen)};
+    const double chanceOfCriticalTemperature{newTemp(gen)};
+
+    if (engTemp >= SystemUI::warningEngTemp) {
+        plusMinus = 1;
+    }
 
     if (!plusMinus) {
-        if (chanceOfCriticalTemperature >= 10) {
-            engTemp += dist(gen) + 40;
+        if (chanceOfCriticalTemperature <= 2) {
+            engTemp += newTemp(gen) + 30;
         } else {
-            engTemp += dist(gen);
+            engTemp += newTemp(gen);
         }
         plusMinus = 1;
     } else {
-        engTemp -= dist(gen);
+        engTemp -= newTemp(gen);
         plusMinus = 0;
     }
 }
@@ -220,8 +234,8 @@ void System::updateFuel(double &fuel, bool &engineIsOn) {
     std::uniform_real_distribution<> dist(0, 2);
     fuel -= dist(gen);
 
-    if (fuel <= 0) {
-        fuel = 0;
+    if (fuel <= SystemUI::outOfFuel) {
+        fuel = SystemUI::outOfFuel;
         engineIsOn = false;
     }
 }

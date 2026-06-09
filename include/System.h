@@ -15,7 +15,7 @@ private:
     std::unique_ptr<SystemUI> sysUI;
     std::vector<std::unique_ptr<Vehicle> > vehicles;
 
-    const std::filesystem::path vehiclesPath{"../data/vehicles.csv"};
+    const std::filesystem::path vehiclesPath{"data/vehicles.csv"};
 
     [[nodiscard]] bool isVehiclesFileExists() const;
 
@@ -31,11 +31,13 @@ private:
 
     static void handleExit(int signum);
 
+    static void cursorBackAndCleaningBottom();
+
     static void hideAndSaveCursorPosition();
 
     static void isOKToStartVehicle(double engTemp, bool &engIsOn, double fuel);
 
-    [[nodiscard]] static double warmingRestingNumGenerator(const std::string &type);
+    [[nodiscard]] static double getRandomTemperature(const std::string &type);
 
     static void warmingUpTheEngine(double &engTemp, const std::string &type);
 

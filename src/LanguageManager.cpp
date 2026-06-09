@@ -8,21 +8,19 @@
 namespace fs = std::filesystem;
 
 LanguageManager::LanguageManager(const std::string_view lang) {
-    Utils::checkOS(dictsPath);
     if (lang == jpDict) {
-        dictLang = std::string(jpDict);
+        dictsPath += std::string(jpDict) + fileType.data();
     } else {
-        dictLang = std::string(enDict);
+        dictsPath += std::string(enDict) + fileType.data();
     }
-    if (isDictExists(dictLang)) {
+    if (isDictExists()) {
         loadDict();
     } else {
         runMissingFileError();
     }
 }
 
-bool LanguageManager::isDictExists(const std::string &lang) {
-    dictsPath += lang + fileType.data();
+bool LanguageManager::isDictExists() const {
     return fs::exists(dictsPath);
 }
 

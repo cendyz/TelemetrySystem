@@ -20,7 +20,6 @@ WARNING;WARNING
 DANGER_TEMP;The engine temperature is dangerously high. Starting cooling...
 WARNING_TEMP;Engine temperature has reached a high level.
 MEDIUM_FUEL;Fuel level is moderate
-LOW_FUEL_COMB;Very low fuel level, refuel the car!
-LOW_FUEL_ELE;Very low fuel level, charge the car!
+LOW_FUEL;Very low fuel level.
 NO_FUEL;Out of fuel in the car!
 FINE;Everything is fine!

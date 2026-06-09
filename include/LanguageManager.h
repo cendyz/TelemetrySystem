@@ -15,9 +15,9 @@ private:
     static constexpr std::string_view jpDict{"jp"};
     std::string dictLang;
 
-    [[nodiscard]] bool isDictExists(const std::string &lang);
+    [[nodiscard]] bool isDictExists() const;
 
-    std::string dictsPath{"../data/"};
+    std::string dictsPath{"data/"};
     static constexpr std::string_view fileType{".txt"};
 
     void loadDict();
