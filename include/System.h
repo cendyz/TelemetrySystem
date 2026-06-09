@@ -3,6 +3,7 @@
 #include "Vehicle.h"
 #include <memory>
 #include <vector>
+#include <filesystem>
 
 class System {
 public:
@@ -14,7 +15,7 @@ private:
     std::unique_ptr<SystemUI> sysUI;
     std::vector<std::unique_ptr<Vehicle> > vehicles;
 
-    std::string vehiclesPath{"../data/vehicles.csv"};
+    const std::filesystem::path vehiclesPath{"../data/vehicles.csv"};
 
     [[nodiscard]] bool isVehiclesFileExists() const;
 

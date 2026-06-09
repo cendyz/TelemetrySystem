@@ -46,7 +46,7 @@ bool System::isVehiclesFileExists() const { return fs::exists(vehiclesPath); }
 void System::createVehiclesFile() const { std::ofstream file(vehiclesPath); }
 
 void System::loadVehiclesFromFile() {
-    std::ifstream file{std::string(vehiclesPath)};
+    std::ifstream file{vehiclesPath};
     std::string line;
 
     while (getline(file, line)) {

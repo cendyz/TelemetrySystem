@@ -10,18 +10,12 @@
 namespace Utils {
     inline static std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
 
-    inline void checkOS(std::string & pathToCorrect) {
-#ifdef _WIN32
-        pathToCorrect = "../" + pathToCorrect;
-#endif
-    }
-
     inline void pauseOutputForXSec(int &&sec) {
         std::this_thread::sleep_for(std::chrono::seconds(sec));
     }
 
     template<typename T>
-    static void printMessageNewLine(const T &msg) {
+    void printMessageNewLine(const T &msg) {
         std::cout << msg << '\n';
     }
 
@@ -33,13 +27,13 @@ namespace Utils {
     }
 
     template<typename T>
-    static void printColorfulMessageNewLine(const T &mess,
-                                     const std::string_view color) {
+    void printColorfulMessageNewLine(const T &mess,
+                                            const std::string_view color) {
         std::cout << color << mess << COLORS::RESET << '\n';
     }
 
     template<typename T>
-    static void printColorfulMessage(const T &mess,
+    void printColorfulMessage(const T &mess,
                                      const std::string_view color) {
         std::cout << color << mess << COLORS::RESET;
     }
@@ -55,10 +49,17 @@ namespace Utils {
     }
 
     template<typename T>
-    static void printRow(const std::string &label, const T &value, const std::string_view color) {
+    void printRow(const std::string &label, const T &value, const std::string_view color) {
         std::cout << std::right << std::setw(20) << label;
         std::cout << color;
         std::cout << std::right << std::setw(7) << value;
         std::cout << COLORS::RESET << '\n';
+    }
+
+    inline void printLabel(const std::string_view label, const std::string_view msg, const std::string_view color) {
+        std::cout << "[";
+        printColorfulMessage(label, color);
+        std::cout << "] ";
+        printMessageNewLine(msg);
     }
 } // namespace Utils
