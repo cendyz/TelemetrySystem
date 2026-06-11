@@ -7,11 +7,20 @@
 
 class System {
 public:
-    System();
+    System(const System &) = delete;
+
+    System &operator=(const System &) = delete;
+
+    static System &getInstace() {
+        static System sys;
+        return sys;
+    }
 
     void run();
 
 private:
+    System();
+
     std::unique_ptr<SystemUI> sysUI;
     std::vector<std::unique_ptr<Vehicle> > vehicles;
 

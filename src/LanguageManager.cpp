@@ -45,3 +45,7 @@ void LanguageManager::runMissingFileError() {
     Utils::printColorfulMessage(descFileNotFoundMsg, COLORS::RED);
     std::exit(EXIT_FAILURE);
 }
+
+std::string LanguageManager::getText(const std::string &key) {
+    return dictionary.at(key);
+}

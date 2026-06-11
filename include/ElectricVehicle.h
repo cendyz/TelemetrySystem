@@ -3,7 +3,11 @@
 
 class ElectricVehicle : public Vehicle {
 public:
-    using Vehicle::Vehicle;
+    ElectricVehicle(std::string name, const double fuel) : Vehicle(std::move(name),
+        fuel, Type::ElectricVehicle) {
+        warningTemp = 100;
+        dangerTemp = 115;
+    }
 
     ~ElectricVehicle() override = default;
 };

@@ -1,7 +1,6 @@
 #include "../include/System.h"
 
 int main() {
-    System system;
-    system.run();
+    System::getInstace().run();
     return 0;
 }

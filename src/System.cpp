@@ -72,13 +72,14 @@ void System::readFileLine(const std::string &line) {
     getline(ss, type, ';');
 
     const double d_fuel(stod(fuel));
+    const int i_type{stoi(type)};
 
     std::unique_ptr<Vehicle> newVehicle;
 
-    if (type == SystemUI::electricCarType) {
-        newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_fuel, std::move(type));
+    if (static_cast<Vehicle::Type>(i_type) == Vehicle::Type::ElectricVehicle) {
+        newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_fuel);
     } else {
-        newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_fuel, std::move(type));
+        newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_fuel);
     }
 
     addVehicleToVar(std::move(newVehicle));
@@ -123,28 +124,13 @@ void System::startSimulation() const {
                 sysUI->printMediumFuelLevel();
             }
 
-            if (vehicle->isON) {
-                if (vehicle->engineTemp <= SystemUI::warmedUpEngineTemp) {
-                    warmingUpTheEngine(vehicle->engineTemp, vehicle->type);
-                } else if (vehicle->engineTemp >= SystemUI::dangerEngTemp) {
-                    collingCriticEngineTemp(vehicle->engineTemp);
-                } else if (vehicle->engineTemp >= SystemUI::warmedUpEngineTemp) {
-                    engineTemperatureMaintenance(vehicle->engineTemp);
-                }
-            } else if (!vehicle->isON && vehicle->engineTemp >= SystemUI::cooledEngineTemperature) {
-                restingDownTheEngine(vehicle->engineTemp, vehicle->type);
-            }
 
-
-            if (vehicle->fuel > SystemUI::outOfFuel) {
-                updateFuel(vehicle->fuel, vehicle->isON);
-            }
 
             if (isAllOK == 1) {
                 sysUI->pritnAllOkInfo();
             }
             isAllOK = 1;
-            std::cout << '\n';
+            Utils::printNewLine();
         }
 
         std::cout.flush();

@@ -20,6 +20,10 @@ namespace Utils {
         std::cout << msg << '\n';
     }
 
+    inline void printNewLine() {
+        std::cout << '\n';
+    }
+
     inline void printMessage(const std::string_view msg) { std::cout << msg; }
 
     template<typename T>
@@ -53,10 +57,8 @@ namespace Utils {
         std::cout << std::right << std::format("{:>20}", label);
         std::cout << color;
         if constexpr (std::is_floating_point_v<T>) {
-            // 1. Obsługa ułamków (float, double) - 2 miejsca po przecinku, do prawej
             std::cout << std::format("{:>7.2f}", value);
         } else {
-            // 3. Obsługa wszystkiego innego (np. int, bool) - zwykłe wyrównanie do prawej
             std::cout << std::format("{:>7}", value);
         }
         std::cout << COLORS::RESET << '\n';

@@ -3,7 +3,12 @@
 
 class CombustionVehicle : public Vehicle {
 public:
-    using Vehicle::Vehicle;
+    CombustionVehicle(std::string name, const double fuel) : Vehicle(std::move(name), fuel, Type::CombustionVehicle) {
+        warningTemp = 105;
+        dangerTemp = 120;
+    }
 
     ~CombustionVehicle() override = default;
+
+private:
 };

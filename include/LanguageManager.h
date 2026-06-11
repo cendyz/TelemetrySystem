@@ -8,12 +8,13 @@ public:
 
     ~LanguageManager() = default;
 
-    std::unordered_map<std::string, std::string> dictionary;
+    [[nodiscard]] std::string getText(const std::string &key);
 
 private:
     static constexpr std::string_view enDict{"en"};
     static constexpr std::string_view jpDict{"jp"};
     std::string dictLang;
+    std::unordered_map<std::string, std::string> dictionary;
 
     [[nodiscard]] bool isDictExists() const;
 
@@ -31,4 +32,5 @@ private:
         "The 'data' folder must contain a file named 'jp.txt' or 'en.txt', which "
         "is available for download in the 'dictionary' folder."
     };
+
 };
