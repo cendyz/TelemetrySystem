@@ -12,27 +12,14 @@ public:
 
     ~SystemUI() = default;
 
-    static constexpr std::string_view electricCarType{"electric"};
-
     void printInitializationMessages() const;
 
     void printVehiclesFileIsEmpty() const;
-    static constexpr std::uint8_t outOfFuel{};
-    static constexpr std::uint8_t lowFuel{20};
-    static constexpr std::uint8_t mediumFuel{40};
-    static constexpr std::uint8_t highFuel{70};
-
-    void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle> > &vehicles,
-                           std::string_view electricCar) const;
+    void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle> > &vehicles) const;
 
     void printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) const;
 
     void printSimulationStartHeader();
-
-    static constexpr std::uint8_t cooledEngineTemperature{};
-    static constexpr std::uint8_t warmedUpEngineTemp{80};
-    static constexpr std::uint8_t warningEngTemp{105};
-    static constexpr std::uint8_t dangerEngTemp{115};
 
     [[nodiscard]] std::string getArrowMsg(const std::string & msg) const;
 
@@ -40,7 +27,7 @@ public:
     void printEngineDanger() const;
 
     void printMediumFuelLevel() const;
-    void printLowFuelLevel(const std::string &type) const;
+    void printLowFuelLevel() const;
     void printNoFuel() const;
 
     void pritnAllOkInfo() const;
@@ -70,12 +57,12 @@ private:
 
     int tickNum{1};
 
-    void printCarNameInfo(const std::string &name, std::string_view color, const bool &isOn, double fuel) const;
+    void printCarNameInfo(std::string_view name, std::string_view color, const bool &isOn, double fuel) const;
 
     void printIsRunning(bool isOn) const;
 
-    void printEngineTemp(double temp) const;
+    void printEngineTemp(double temp, double warningTemp, double dangerTemp) const;
 
-    void printFuel(double fuel) const;
+    void printFuel(const std::unique_ptr<Vehicle> &obj) const;
 
 };

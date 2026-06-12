@@ -8,36 +8,69 @@ public:
         ElectricVehicle = 2
     };
 
-    std::string name;
-    double fuel{};
-    double engineTemp{};
-    Type type;
-    bool isON{};
-    double outOfFuel{};
-    double warmedUpEngineTemp{80};
-    double cooledEngineTemperature{};
-    double warningTemp{};
-    double dangerTemp{};
-
 
     Vehicle(std::string name, const double fuel, const Type type)
         : name(std::move(name)), fuel(fuel), type(type) {
     }
 
+    void isOKToStartVehicle();
+
     virtual void updatePhysics();
 
     virtual ~Vehicle() = default;
 
+    [[nodiscard]] std::string_view getName() const;
+
+    [[nodiscard]] double getFuel() const;
+
+    [[nodiscard]] double getEngineTemp() const;
+
+    [[nodiscard]] Type getType() const;
+
+    [[nodiscard]] bool getIsOn() const;
+
+    [[nodiscard]] int getOutOfFuel();
+
+    [[nodiscard]] int getLowFuel();
+
+    [[nodiscard]] int getMediumFuel();
+
+    [[nodiscard]] int getHighFuel();
+
+    [[nodiscard]] int getWarmedUpEngineTemp() const;
+
+    [[nodiscard]] int getCooledEnginteTemp() const;
+
+    [[nodiscard]] int getWarningTemp() const;
+
+    [[nodiscard]] int getDangerTemp() const;
+
+protected:
+    double warningTemp{};
+    double dangerTemp{};
+
 private:
-    virtual void isOKToStartVehicle() = 0;
+    std::string name;
+    double fuel{};
+    double engineTemp{};
+    Type type;
+    bool isOn{};
+    const int outOfFuel{};
+    const int lowFuel{20};
+    const int mediumFuel{50};
+    const int highFuel{80};
+    const int warmedUpEngineTemp{80};
+    double cooledEngineTemperature{};
 
-    virtual void warmingUpTheEngine() = 0;
+    void warmingUpTheEngine();
 
-    virtual void collingCriticEngineTemp() = 0;
+    [[nodiscard]] double getRandomTemperature() const;
 
-    virtual void engineTemperatureMaintenance() = 0;
+    void collingCriticEngineTemp();
 
-    virtual void restingDownTheEngine() = 0;
+    void engineTemperatureMaintenance();
 
-    virtual void updateFuel() = 0;
+    void restingDownTheEngine();
+
+    void updateFuel();
 };

@@ -43,18 +43,4 @@ private:
     static void cursorBackAndCleaningBottom();
 
     static void hideAndSaveCursorPosition();
-
-    static void isOKToStartVehicle(double engTemp, bool &engIsOn, double fuel);
-
-    [[nodiscard]] static double getRandomTemperature(const std::string &type);
-
-    static void warmingUpTheEngine(double &engTemp, const std::string &type);
-
-    static void restingDownTheEngine(double &engTemp, const std::string &type);
-
-    static void updateFuel(double &fuel, bool &engineIsOn);
-
-    static void engineTemperatureMaintenance(double &engTemp);
-
-    static void collingCriticEngineTemp(double &engTemp);
 };

@@ -32,5 +32,4 @@ private:
         "The 'data' folder must contain a file named 'jp.txt' or 'en.txt', which "
         "is available for download in the 'dictionary' folder."
     };
-
 };

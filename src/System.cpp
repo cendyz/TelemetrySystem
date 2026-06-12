@@ -46,7 +46,7 @@ void System::run() {
         return;
     }
 
-    sysUI->printAddedVehicle(vehicles, SystemUI::electricCarType);
+    sysUI->printAddedVehicle(vehicles, Vehicle::Type::ElectricVehicle);
     startSimulation();
 }
 
@@ -103,34 +103,35 @@ void System::startSimulation() const {
 
         for (auto &vehicle: vehicles) {
             sysUI->printTelemetricSimulation(vehicle);
-            isOKToStartVehicle(vehicle->engineTemp, vehicle->isON, vehicle->fuel);
+            vehicle->isOKToStartVehicle();
 
-            if (vehicle->engineTemp >= SystemUI::dangerEngTemp) {
+            if (vehicle->getEngineTemp() >= vehicle->getDangerTemp()) {
                 --isAllOK;
                 sysUI->printEngineDanger();
-            } else if (vehicle->engineTemp >= SystemUI::warningEngTemp) {
+            } else if (vehicle->getEngineTemp() >= vehicle->getWarningTemp()) {
                 --isAllOK;
                 sysUI->printEngineWarning();
             }
 
-            if (vehicle->fuel <= SystemUI::outOfFuel) {
+            if (vehicle->getFuel() <= vehicle->getOutOfFuel()) {
                 --isAllOK;
                 sysUI->printNoFuel();
-            } else if (vehicle->fuel <= SystemUI::lowFuel) {
+            } else if (vehicle->getFuel() <= vehicle->getLowFuel()) {
                 --isAllOK;
-                sysUI->printLowFuelLevel(vehicle->type);
-            } else if (vehicle->fuel == SystemUI::outOfFuel || vehicle->fuel <= SystemUI::mediumFuel) {
+                sysUI->printLowFuelLevel();
+            } else if (vehicle->getFuel() == vehicle->getOutOfFuel() || vehicle->getFuel() <= vehicle->
+                       getMediumFuel()) {
                 --isAllOK;
                 sysUI->printMediumFuelLevel();
             }
-
-
 
             if (isAllOK == 1) {
                 sysUI->pritnAllOkInfo();
             }
             isAllOK = 1;
             Utils::printNewLine();
+
+            vehicle->updatePhysics();
         }
 
         std::cout.flush();
@@ -150,78 +151,4 @@ void System::hideAndSaveCursorPosition() {
 
 void System::cursorBackAndCleaningBottom() {
     std::cout << "\033[u\033[J";
-}
-
-void System::isOKToStartVehicle(const double engTemp, bool &engIsOn, const double fuel) {
-    if (!engIsOn && engTemp < SystemUI::dangerEngTemp && fuel > SystemUI::outOfFuel) {
-        engIsOn = true;
-    }
-}
-
-double System::getRandomTemperature(const std::string &type) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist1(3, 18);
-    std::uniform_real_distribution<> dist2(2, 13);
-    if (type == SystemUI::electricCarType) {
-        return dist1(gen);
-    }
-    return (dist1(gen) + dist2(gen)) / 2;
-}
-
-void System::warmingUpTheEngine(double &engTemp, const std::string &type) {
-    engTemp += getRandomTemperature(type);
-}
-
-void System::restingDownTheEngine(double &engTemp, const std::string &type) {
-    engTemp -= getRandomTemperature(type);
-
-    if (engTemp <= SystemUI::cooledEngineTemperature) {
-        engTemp = SystemUI::cooledEngineTemperature;
-    }
-}
-
-void System::engineTemperatureMaintenance(double &engTemp) {
-    static std::uint8_t plusMinus{};
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> newTemp(1, 7);
-
-    const double chanceOfCriticalTemperature{newTemp(gen)};
-
-    if (engTemp >= SystemUI::warningEngTemp) {
-        plusMinus = 1;
-    }
-
-    if (!plusMinus) {
-        if (chanceOfCriticalTemperature <= 2) {
-            engTemp += newTemp(gen) + 30;
-        } else {
-            engTemp += newTemp(gen);
-        }
-        plusMinus = 1;
-    } else {
-        engTemp -= newTemp(gen);
-        plusMinus = 0;
-    }
-}
-
-void System::collingCriticEngineTemp(double &engTemp) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist(5, 15);
-
-    engTemp -= dist(gen);
-}
-
-void System::updateFuel(double &fuel, bool &engineIsOn) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist(0, 2);
-    fuel -= dist(gen);
-
-    if (fuel <= SystemUI::outOfFuel) {
-        fuel = SystemUI::outOfFuel;
-        engineIsOn = false;
-    }
 }

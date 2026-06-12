@@ -43,17 +43,15 @@ void SystemUI::printVehiclesFileIsEmpty() const {
 }
 
 void SystemUI::printAddedVehicle(
-    const std::vector<std::unique_ptr<Vehicle> > &vehicles,
-    const std::string_view electricCar) const {
+    const std::vector<std::unique_ptr<Vehicle> > &vehicles) const {
     for (auto &vehicle: vehicles) {
-        if (vehicle->type != electricCar) {
             Utils::printLabel(langManager->getText("S_INFO"), COLORS::YELLOW);
+        if (vehicle->getType() != Vehicle::Type::ElectricVehicle) {
             Utils::printMessageWithSpace(langManager->getText("ADD_COMBUSTION"));
-            Utils::printColorfulMessageNewLine(vehicle->name, COLORS::BLU);
+            Utils::printColorfulMessageNewLine(vehicle->getName(), COLORS::BLU);
         } else {
-            Utils::printLabel(langManager->getText("S_INFO"), COLORS::YELLOW);
             Utils::printMessageWithSpace(langManager->getText("ADD_ELECTRIC"));
-            Utils::printColorfulMessageNewLine(vehicle->name, COLORS::MAGNETA);
+            Utils::printColorfulMessageNewLine(vehicle->getName(), COLORS::MAGNETA);
         }
 
         Utils::pauseOutputForXSec(1);
@@ -61,11 +59,11 @@ void SystemUI::printAddedVehicle(
 }
 
 void SystemUI::printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) const {
-    const std::string_view color{(obj->type == electricCarType) ? COLORS::BLU : COLORS::MAGNETA};
-    printCarNameInfo(obj->name, color, obj->isON, obj->fuel);
-    printIsRunning(obj->isON);
-    printEngineTemp(obj->engineTemp);
-    printFuel(obj->fuel);
+    const std::string_view color{(obj->getType() == Vehicle::Type::ElectricVehicle) ? COLORS::BLU : COLORS::MAGNETA};
+    printCarNameInfo(obj->getName(), color, obj->getIsOn(), obj->getFuel());
+    printIsRunning(obj->getIsOn());
+    printEngineTemp(obj->getEngineTemp(), obj->getWarningTemp(), obj->getDangerTemp());
+    printFuel(obj);
     Utils::printNewLine();
 }
 
@@ -77,7 +75,7 @@ void SystemUI::printSimulationStartHeader() {
     Utils::printNewLine();
 }
 
-void SystemUI::printCarNameInfo(const std::string &name, const std::string_view color,
+void SystemUI::printCarNameInfo(const std::string_view name, const std::string_view color,
                                 const bool &isOn, const double fuel) const {
     Utils::printMessageWithSpace(langManager->getText("TELEMETRY"));
     std::cout << color << name << COLORS::RESET << " ";
@@ -96,29 +94,29 @@ void SystemUI::printIsRunning(const bool isOn) const {
     Utils::printRow(getArrowMsg(langManager->getText("IS_RUN")), engine, color);
 }
 
-void SystemUI::printEngineTemp(const double temp) const {
+void SystemUI::printEngineTemp(const double temp, const double warningTemp, const double dangerTemp) const {
     const std::string_view color{
-        (temp <= warningEngTemp)
+        (temp <= warningTemp)
             ? COLORS::WHITE
-            : (temp >= dangerEngTemp)
+            : (temp >= dangerTemp)
                   ? COLORS::RED
                   : COLORS::L_YELLOW
     };
     Utils::printRow(getArrowMsg(langManager->getText("E_TEMP")), temp, color);
 }
 
-void SystemUI::printFuel(const double fuel) const {
+void SystemUI::printFuel(const std::unique_ptr<Vehicle> &obj) const {
     const std::string_view color{
-        (fuel <= lowFuel)
+        (obj->getFuel() <= obj->getLowFuel())
             ? COLORS::RED
-            : (fuel > mediumFuel && fuel <= mediumFuel)
+            : (obj->getFuel() > obj->getMediumFuel() && obj->getFuel() <= obj->getMediumFuel())
                   ? COLORS::L_YELLOW
-                  : (fuel >= highFuel)
+                  : (obj->getFuel() >= obj->getHighFuel())
                         ? COLORS::GREEN
                         : COLORS::WHITE
     };
 
-    Utils::printRow(getArrowMsg(langManager->getText("F_LEVEL")), fuel, color);
+    Utils::printRow(getArrowMsg(langManager->getText("F_LEVEL")), obj->getFuel(), color);
 }
 
 std::string SystemUI::getArrowMsg(const std::string &msg) const {
@@ -140,7 +138,7 @@ void SystemUI::printMediumFuelLevel() const {
     Utils::printMessageNewLine(langManager->getText("MEDIUM_FUEL"));
 }
 
-void SystemUI::printLowFuelLevel(const std::string &type) const {
+void SystemUI::printLowFuelLevel() const {
     Utils::printLabel(langManager->getText("ALERT"), COLORS::RED);
     Utils::printMessageNewLine(langManager->getText("LOW_FUEL"));
 }

@@ -9,6 +9,4 @@ public:
     }
 
     ~CombustionVehicle() override = default;
-
-private:
 };
