@@ -46,7 +46,7 @@ void System::run() {
         return;
     }
 
-    sysUI->printAddedVehicle(vehicles, Vehicle::Type::ElectricVehicle);
+    sysUI->printAddedVehicle(vehicles);
     startSimulation();
 }
 
