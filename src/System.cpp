@@ -1,7 +1,5 @@
 #include "../include/System.h"
-#ifdef _WIN32
 #include <windows.h>
-#endif
 #include "ElectricVehicle.h"
 #include "Vehicle.h"
 #include <CombustionVehicle.h>
@@ -16,19 +14,9 @@
 #include "Utils.h"
 namespace fs = std::filesystem;
 
-constexpr std::string_view getOSname() {
-#if defined(_WIN32)
-    return "windows";
-#else
-    return "linux";
-#endif
-}
-
 System::System() {
-    if (getOSname() == "windows") {
-        SetConsoleOutputCP(CP_UTF8);
-        SetConsoleCP(CP_UTF8);
-    }
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
 }
 
 void System::run() {
