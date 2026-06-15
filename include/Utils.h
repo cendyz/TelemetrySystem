@@ -9,7 +9,7 @@
 #include <format>
 
 namespace Utils {
-    inline static std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
+    inline std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
 
     inline void pauseOutputForXSec(int &&sec) {
         std::this_thread::sleep_for(std::chrono::seconds(sec));
