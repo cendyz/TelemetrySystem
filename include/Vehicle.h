@@ -15,7 +15,7 @@ public:
 
     void isOKToStartVehicle();
 
-    virtual void updatePhysics();
+    void updatePhysics();
 
     virtual ~Vehicle() = default;
 
