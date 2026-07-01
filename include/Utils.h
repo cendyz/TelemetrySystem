@@ -6,6 +6,7 @@
 #include <regex>
 #include <string>
 #include <thread>
+#include <algorithm>
 #include <format>
 
 namespace Utils {
@@ -54,7 +55,7 @@ namespace Utils {
 
     template<typename T>
     void printRow(const std::string &label, const T &value, const std::string_view color) {
-        std::cout << std::right << std::format("{:>20}", label);
+        std::cout << std::format("{:>20}", label);
         std::cout << color;
         if constexpr (std::is_floating_point_v<T>) {
             std::cout << std::format("{:>7.2f}", value);

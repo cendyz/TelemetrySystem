@@ -21,6 +21,7 @@ System::System() {
 
 void System::run() {
     sysUI = std::make_unique<SystemUI>();
+    hideCursorPosition();
     sysUI->printInitializationMessages();
 
     if (!isVehiclesFileExists()) {
@@ -82,7 +83,7 @@ void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle) {
 void System::startSimulation() const {
     signal(SIGINT, handleExit);
 
-    hideAndSaveCursorPosition();
+    saveCursorPosition();
 
     while (true) {
         cursorBackAndCleaningBottom();
@@ -132,8 +133,11 @@ void System::handleExit(const int signum) {
     exit(signum);
 }
 
-void System::hideAndSaveCursorPosition() {
+void System::hideCursorPosition() {
     std::cout << "\033[?25l";
+}
+
+void System::saveCursorPosition() {
     std::cout << "\033[s";
 }
 

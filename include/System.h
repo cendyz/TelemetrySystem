@@ -42,5 +42,7 @@ private:
 
     static void cursorBackAndCleaningBottom();
 
-    static void hideAndSaveCursorPosition();
+    static void hideCursorPosition();
+
+    static void saveCursorPosition();
 };

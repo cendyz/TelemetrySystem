@@ -45,7 +45,7 @@ void SystemUI::printVehiclesFileIsEmpty() const {
 void SystemUI::printAddedVehicle(
     const std::vector<std::unique_ptr<Vehicle> > &vehicles) const {
     for (auto &vehicle: vehicles) {
-            Utils::printLabel(langManager->getText("S_INFO"), COLORS::YELLOW);
+        Utils::printLabel(langManager->getText("S_INFO"), COLORS::YELLOW);
         if (vehicle->getType() != Vehicle::Type::ElectricVehicle) {
             Utils::printMessageWithSpace(langManager->getText("ADD_COMBUSTION"));
             Utils::printColorfulMessageNewLine(vehicle->getName(), COLORS::BLU);
@@ -59,7 +59,7 @@ void SystemUI::printAddedVehicle(
 }
 
 void SystemUI::printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj) const {
-    const std::string_view color{(obj->getType() == Vehicle::Type::ElectricVehicle) ? COLORS::BLU : COLORS::MAGNETA};
+    const std::string_view color{obj->getType() == Vehicle::Type::ElectricVehicle ? COLORS::BLU : COLORS::MAGNETA};
     printCarNameInfo(obj->getName(), color, obj->getIsOn(), obj->getFuel());
     printIsRunning(obj->getIsOn());
     printEngineTemp(obj->getEngineTemp(), obj->getWarningTemp(), obj->getDangerTemp());
@@ -81,10 +81,10 @@ void SystemUI::printCarNameInfo(const std::string_view name, const std::string_v
     std::cout << color << name << COLORS::RESET << " ";
     if (isOn && fuel > 0) {
         std::cout << langManager->getText("RUN") << ":";
-    Utils::printNewLine();
+        Utils::printNewLine();
     } else {
         std::cout << langManager->getText("REST") << ":";
-    Utils::printNewLine();
+        Utils::printNewLine();
     }
 }
 
@@ -96,9 +96,9 @@ void SystemUI::printIsRunning(const bool isOn) const {
 
 void SystemUI::printEngineTemp(const double temp, const double warningTemp, const double dangerTemp) const {
     const std::string_view color{
-        (temp <= warningTemp)
+        temp <= warningTemp
             ? COLORS::WHITE
-            : (temp >= dangerTemp)
+            : temp >= dangerTemp
                   ? COLORS::RED
                   : COLORS::L_YELLOW
     };
@@ -107,11 +107,11 @@ void SystemUI::printEngineTemp(const double temp, const double warningTemp, cons
 
 void SystemUI::printFuel(const std::unique_ptr<Vehicle> &obj) const {
     const std::string_view color{
-        (obj->getFuel() <= obj->getLowFuel())
+        obj->getFuel() <= obj->getLowFuel()
             ? COLORS::RED
-            : (obj->getFuel() > obj->getMediumFuel() && obj->getFuel() <= obj->getMediumFuel())
+            : obj->getFuel() > obj->getMediumFuel() && obj->getFuel() <= obj->getMediumFuel()
                   ? COLORS::L_YELLOW
-                  : (obj->getFuel() >= obj->getHighFuel())
+                  : obj->getFuel() >= obj->getHighFuel()
                         ? COLORS::GREEN
                         : COLORS::WHITE
     };

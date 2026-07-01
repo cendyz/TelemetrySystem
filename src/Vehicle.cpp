@@ -1,7 +1,6 @@
 #include <Vehicle.h>
 #include <random>
 
-
 std::string_view Vehicle::getName() const {
     return name;
 }
