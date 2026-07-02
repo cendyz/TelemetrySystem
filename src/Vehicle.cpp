@@ -80,8 +80,8 @@ void Vehicle::isOKToStartVehicle() {
 double Vehicle::getRandomTemperature() const {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist1(3, 18);
-    std::uniform_real_distribution<> dist2(2, 13);
+    std::uniform_real_distribution<> dist1(3, 11);
+    std::uniform_real_distribution<> dist2(2, 12);
     if (type == Type::ElectricVehicle) {
         return dist1(gen);
     }
@@ -101,20 +101,17 @@ void Vehicle::restingDownTheEngine() {
 }
 
 void Vehicle::engineTemperatureMaintenance() {
-    static std::uint8_t plusMinus{};
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> newTemp(1, 7);
-
+    std::uniform_real_distribution<> newTemp(1, 6);
     const double chanceOfCriticalTemperature{newTemp(gen)};
 
     if (engineTemp >= warningTemp) {
         plusMinus = 1;
+        engineTemp -= newTemp(gen);
     }
 
     if (!plusMinus) {
-        if (chanceOfCriticalTemperature <= 2) {
-            engineTemp += newTemp(gen) + 30;
+        if (chanceOfCriticalTemperature <= 3) {
+            engineTemp += newTemp(gen) + 20;
         } else {
             engineTemp += newTemp(gen);
         }
@@ -128,7 +125,7 @@ void Vehicle::engineTemperatureMaintenance() {
 void Vehicle::collingCriticEngineTemp() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dist(5, 15);
+    std::uniform_real_distribution<> dist(2, 7);
 
     engineTemp -= dist(gen);
 }

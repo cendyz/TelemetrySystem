@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <random>
 
 class Vehicle {
 public:
@@ -10,7 +11,7 @@ public:
 
 
     Vehicle(std::string name, const double fuel, const Type type)
-        : name(std::move(name)), fuel(fuel), type(type) {
+        : name(std::move(name)), fuel(fuel), type(type), gen(std::random_device{}()) {
     }
 
     void isOKToStartVehicle();
@@ -61,6 +62,9 @@ private:
     const int highFuel{80};
     const int warmedUpEngineTemp{80};
     double cooledEngineTemperature{};
+
+    std::uint8_t plusMinus{};
+    std::mt19937 gen;
 
     void warmingUpTheEngine();
 
