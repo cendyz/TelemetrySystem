@@ -29,13 +29,13 @@ public:
 
     [[nodiscard]] bool getIsOn() const;
 
-    [[nodiscard]] int getOutOfFuel();
+    [[nodiscard]] int getOutOfFuel() const;
 
-    [[nodiscard]] int getLowFuel();
+    [[nodiscard]] int getLowFuel() const;
 
-    [[nodiscard]] int getMediumFuel();
+    [[nodiscard]] int getMediumFuel() const;
 
-    [[nodiscard]] int getHighFuel();
+    [[nodiscard]] int getHighFuel() const;
 
     [[nodiscard]] int getWarmedUpEngineTemp() const;
 

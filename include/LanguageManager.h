@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <filesystem>
 
 class LanguageManager {
 public:
@@ -16,9 +17,9 @@ private:
     std::string dictLang;
     std::unordered_map<std::string, std::string> dictionary;
 
-    [[nodiscard]] bool isDictExists() const;
+    [[nodiscard]] static bool isDictExists();
 
-    std::string dictsPath{"data/"};
+    inline static std::filesystem::path dictsPath{DATA_DIR};
     static constexpr std::string_view fileType{".txt"};
 
     void loadDict();

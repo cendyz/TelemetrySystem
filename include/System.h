@@ -24,11 +24,11 @@ private:
     std::unique_ptr<SystemUI> sysUI;
     std::vector<std::unique_ptr<Vehicle> > vehicles;
 
-    const std::filesystem::path vehiclesPath{"data/vehicles.csv"};
+    inline static const std::filesystem::path vehiclesPath{DATA_DIR "vehicles.csv"};
 
-    [[nodiscard]] bool isVehiclesFileExists() const;
+    [[nodiscard]] static bool isVehiclesFileExists();
 
-    void createVehiclesFile() const;
+    static void createVehiclesFile();
 
     void loadVehiclesFromFile();
 

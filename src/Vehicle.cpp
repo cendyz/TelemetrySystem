@@ -21,18 +21,18 @@ bool Vehicle::getIsOn() const {
     return isOn;
 }
 
-int Vehicle::getOutOfFuel() {
+int Vehicle::getOutOfFuel() const {
     return outOfFuel;
 }
-int Vehicle::getLowFuel() {
+int Vehicle::getLowFuel() const {
     return lowFuel;
 }
 
-int Vehicle::getMediumFuel() {
+int Vehicle::getMediumFuel() const {
     return mediumFuel;
 }
 
-int Vehicle::getHighFuel() {
+int Vehicle::getHighFuel() const {
     return highFuel;
 }
 

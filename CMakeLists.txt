@@ -26,10 +26,8 @@ target_include_directories(CoreLogic PUBLIC include)
 add_executable(system src/main.cpp)
 target_link_libraries(system PRIVATE CoreLogic)
 
-add_custom_command(TARGET system POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/data
-        $<TARGET_FILE_DIR:system>/data
+target_compile_definitions(CoreLogic PUBLIC
+    DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/"
 )
 
 enable_testing()

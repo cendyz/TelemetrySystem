@@ -39,9 +39,9 @@ void System::run() {
     startSimulation();
 }
 
-bool System::isVehiclesFileExists() const { return fs::exists(vehiclesPath); }
+bool System::isVehiclesFileExists()  { return fs::exists(vehiclesPath); }
 
-void System::createVehiclesFile() const { std::ofstream file(vehiclesPath); }
+void System::createVehiclesFile() { std::ofstream file(vehiclesPath); }
 
 void System::loadVehiclesFromFile() {
     std::ifstream file{vehiclesPath};

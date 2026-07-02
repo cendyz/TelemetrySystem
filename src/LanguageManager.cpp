@@ -20,7 +20,7 @@ LanguageManager::LanguageManager(const std::string_view lang) {
     }
 }
 
-bool LanguageManager::isDictExists() const {
+bool LanguageManager::isDictExists() {
     return fs::exists(dictsPath);
 }
 
