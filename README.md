@@ -1,9 +1,8 @@
 <div>
-  <img src="images/terminal.png" alt="terminal icon" width="137" height="128" align="left" style="margin-right: 15px;" />
-  <h1 style="border-bottom: none;">Telemetry and Vehicle Fleet Simulation System</h2>
+  <img src="images/terminal.png" alt="Terminal icon" width="137" height="128" align="left" style="margin-right: 15px;" />
+  <span style="font-size: 2em; font-weight: 600;">Telemetry and Vehicle Fleet Simulation System</span>
 </div>
-
-<br>
+<br clear="left" />
 <br>
 <br>
 
