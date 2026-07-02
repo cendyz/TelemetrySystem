@@ -1,4 +1,4 @@
-<img src="images/terminal.png" alt="'image: Flaticon.com'. This terminal cover has been designed using resources from Flaticon.com" width="128" height="128" align="left"/>
+<img src="images/terminal.png" alt="Terminal icon" width="137" height="128" align="left" style="margin-right: 15px;" />
 
 # Telemetry and Vehicle Fleet Simulation System
 

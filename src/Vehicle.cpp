@@ -111,7 +111,7 @@ void Vehicle::engineTemperatureMaintenance() {
 
     if (!plusMinus) {
         if (chanceOfCriticalTemperature <= 3) {
-            engineTemp += newTemp(gen) + 20;
+            engineTemp += newTemp(gen) + 30;
         } else {
             engineTemp += newTemp(gen);
         }
