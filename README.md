@@ -1,8 +1,9 @@
-<img src="images/terminal.png" alt="Terminal icon" width="137" height="128" align="left" style="margin-right: 15px;" />
 
-# Telemetry and Vehicle Fleet Simulation System
+<h1 align="center">
+  <img src="images/terminal.png" alt="Terminal icon" width="137" height="128" align="center" style="z-index: 10000;" />
+  Telemetry and Vehicle Fleet Simulation System
+</h1>
 
-<br>
 <br>
 <br>
 
