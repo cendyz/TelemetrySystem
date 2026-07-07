@@ -21,22 +21,22 @@ bool Vehicle::getIsOn() const {
     return isOn;
 }
 
-int Vehicle::getOutOfFuel() const {
+int Vehicle::getOutOfFuel() {
     return outOfFuel;
 }
-int Vehicle::getLowFuel() const {
+int Vehicle::getLowFuel()  {
     return lowFuel;
 }
 
-int Vehicle::getMediumFuel() const {
+int Vehicle::getMediumFuel()  {
     return mediumFuel;
 }
 
-int Vehicle::getHighFuel() const {
+int Vehicle::getHighFuel()  {
     return highFuel;
 }
 
-int Vehicle::getWarmedUpEngineTemp() const {
+int Vehicle::getWarmedUpEngineTemp() {
     return warmedUpEngineTemp;
 }
 
@@ -77,9 +77,7 @@ void Vehicle::isOKToStartVehicle() {
     }
 }
 
-double Vehicle::getRandomTemperature() const {
-    std::random_device rd;
-    std::mt19937 gen(rd());
+double Vehicle::getRandomTemperature() {
     std::uniform_real_distribution<> dist1(3, 11);
     std::uniform_real_distribution<> dist2(2, 12);
     if (type == Type::ElectricVehicle) {

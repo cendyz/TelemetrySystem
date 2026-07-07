@@ -9,22 +9,18 @@ public:
 
     ~LanguageManager() = default;
 
-    [[nodiscard]] std::string getText(const std::string &key);
+    [[nodiscard]] static std::string_view getText(const std::string &key);
 
 private:
     static constexpr std::string_view enDict{"en"};
     static constexpr std::string_view jpDict{"jp"};
-    std::string dictLang;
-    std::unordered_map<std::string, std::string> dictionary;
-
-    [[nodiscard]] static bool isDictExists();
+    inline static std::string dictLang;
+    inline static std::unordered_map<std::string, std::string> dictionary;
 
     inline static std::filesystem::path dictsPath{DATA_DIR};
     static constexpr std::string_view fileType{".txt"};
 
-    void loadDict();
-
-    static void runMissingFileError();
+    inline static void loadDict();
 
     static constexpr std::string_view fileNotFoundMsg{
         "Error: Dictionary not found."

@@ -1,48 +1,40 @@
 #pragma once
 #include "SystemUI.h"
 #include "Vehicle.h"
+#include <filesystem>
 #include <memory>
 #include <vector>
-#include <filesystem>
 
 class System {
 public:
-    System(const System &) = delete;
+  System();
 
-    System &operator=(const System &) = delete;
-
-    static System &getInstace() {
-        static System sys;
-        return sys;
-    }
-
-    void run();
+  void run();
 
 private:
-    System();
+  std::unique_ptr<SystemUI> sysUI;
+  inline static std::vector<std::unique_ptr<Vehicle>> vehicles;
 
-    std::unique_ptr<SystemUI> sysUI;
-    std::vector<std::unique_ptr<Vehicle> > vehicles;
+  inline static const std::filesystem::path vehiclesPath{DATA_DIR
+                                                         "vehicles.csv"};
 
-    inline static const std::filesystem::path vehiclesPath{DATA_DIR "vehicles.csv"};
+  [[nodiscard]] static bool isVehiclesFileExists();
 
-    [[nodiscard]] static bool isVehiclesFileExists();
+  static void createVehiclesFile();
 
-    static void createVehiclesFile();
+  inline static void loadVehiclesFromFile();
 
-    void loadVehiclesFromFile();
+  inline static void readFileLine(const std::string &line);
 
-    void readFileLine(const std::string &line);
+  inline static void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
 
-    void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
+  void startSimulation() const;
 
-    void startSimulation() const;
+  inline static void handleExit(int signum);
 
-    static void handleExit(int signum);
+  inline static void cursorBackAndCleaningBottom();
 
-    static void cursorBackAndCleaningBottom();
+  inline static void hideCursorPosition();
 
-    static void hideCursorPosition();
-
-    static void saveCursorPosition();
+  inline static void saveCursorPosition();
 };

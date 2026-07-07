@@ -30,15 +30,15 @@ public:
 
     [[nodiscard]] bool getIsOn() const;
 
-    [[nodiscard]] int getOutOfFuel() const;
+    [[nodiscard]] static int getOutOfFuel();
 
-    [[nodiscard]] int getLowFuel() const;
+    [[nodiscard]] static int getLowFuel() ;
 
-    [[nodiscard]] int getMediumFuel() const;
+    [[nodiscard]] static int getMediumFuel() ;
 
-    [[nodiscard]] int getHighFuel() const;
+    [[nodiscard]] static int getHighFuel() ;
 
-    [[nodiscard]] int getWarmedUpEngineTemp() const;
+    [[nodiscard]] static int getWarmedUpEngineTemp();
 
     [[nodiscard]] int getCooledEnginteTemp() const;
 
@@ -56,11 +56,11 @@ private:
     double engineTemp{};
     Type type;
     bool isOn{};
-    const int outOfFuel{};
-    const int lowFuel{20};
-    const int mediumFuel{50};
-    const int highFuel{80};
-    const int warmedUpEngineTemp{80};
+    static constexpr int outOfFuel{};
+    static constexpr int lowFuel{20};
+    static constexpr int mediumFuel{50};
+    static constexpr int highFuel{80};
+    static constexpr int warmedUpEngineTemp{80};
     double cooledEngineTemperature{};
 
     std::uint8_t plusMinus{};
@@ -68,7 +68,7 @@ private:
 
     void warmingUpTheEngine();
 
-    [[nodiscard]] double getRandomTemperature() const;
+    [[nodiscard]] double getRandomTemperature();
 
     void collingCriticEngineTemp();
 
