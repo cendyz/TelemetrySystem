@@ -15,127 +15,167 @@
 #include <windows.h>
 namespace fs = std::filesystem;
 
-System::System() {
-  SetConsoleOutputCP(CP_UTF8);
-  SetConsoleCP(CP_UTF8);
+System::System()
+{
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
 }
 
-void System::run() {
-  sysUI = std::make_unique<SystemUI>();
-  hideCursorPosition();
-  sysUI->printInitializationMessages();
+void System::run()
+{
+    sysUI = std::make_unique<SystemUI>();
+    hideCursorPosition();
+    SystemUI::printInitializationMessages();
 
-  if (!isVehiclesFileExists()) {
-    createVehiclesFile();
-  }
-
-  loadVehiclesFromFile();
-
-  if (vehicles.empty()) {
-    sysUI->printVehiclesFileIsEmpty();
-    return;
-  }
-
-  sysUI->printAddedVehicle(vehicles);
-  startSimulation();
-}
-
-bool System::isVehiclesFileExists() { return fs::exists(vehiclesPath); }
-
-void System::createVehiclesFile() { std::ofstream file(vehiclesPath); }
-
-void System::loadVehiclesFromFile() {
-  std::ifstream file{vehiclesPath};
-  std::string line;
-
-  while (getline(file, line)) {
-    readFileLine(line);
-  }
-}
-
-void System::readFileLine(const std::string &line) {
-  std::stringstream ss(line);
-  std::string name, fuel, type;
-
-  getline(ss, name, ';');
-  getline(ss, fuel, ';');
-  getline(ss, type, ';');
-
-  const double d_fuel(stod(fuel));
-  const int i_type{stoi(type)};
-
-  std::unique_ptr<Vehicle> newVehicle;
-
-  if (static_cast<Vehicle::Type>(i_type) == Vehicle::Type::ElectricVehicle) {
-    newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_fuel);
-  } else {
-    newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_fuel);
-  }
-
-  addVehicleToVar(std::move(newVehicle));
-}
-
-void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle) {
-  if (vehicle) {
-    vehicles.emplace_back(std::move(vehicle));
-  }
-}
-
-void System::startSimulation() const {
-  signal(SIGINT, handleExit);
-
-  saveCursorPosition();
-
-  while (true) {
-    cursorBackAndCleaningBottom();
-    sysUI->printSimulationStartHeader();
-    std::uint8_t isAllOK{1};
-
-    for (auto &vehicle : vehicles) {
-      sysUI->printTelemetricSimulation(vehicle);
-      vehicle->isOKToStartVehicle();
-
-      if (vehicle->getEngineTemp() >= vehicle->getDangerTemp()) {
-        --isAllOK;
-        SystemUI::printDanger(LanguageManager::getText("DANGER_TEMP"));
-      } else if (vehicle->getEngineTemp() >= vehicle->getWarningTemp()) {
-        --isAllOK;
-        SystemUI::printWarning(LanguageManager::getText("WARNING_TEMP"));
-      }
-
-      if (vehicle->getFuel() <= vehicle->getOutOfFuel()) {
-        --isAllOK;
-        SystemUI::printInfo(LanguageManager::getText("FINE"));
-      } else if (vehicle->getFuel() <= vehicle->getLowFuel()) {
-        --isAllOK;
-        SystemUI::printWarning(LanguageManager::getText("ALERT"));
-      } else if (vehicle->getFuel() == vehicle->getOutOfFuel() ||
-                 vehicle->getFuel() <= vehicle->getMediumFuel()) {
-        --isAllOK;
-        SystemUI::printWarning(LanguageManager::getText("MEDIUM_FUEL"));
-      }
-
-      if (isAllOK == 1) {
-        SystemUI::printInfo(LanguageManager::getText("FINE"));
-      }
-      isAllOK = 1;
-      Utils::printNewLine();
-
-      vehicle->updatePhysics();
+    if (!isVehiclesFileExists())
+    {
+        createVehiclesFile();
     }
 
-    std::cout.flush();
-    Utils::pauseOutputForXSec(2);
-  }
+    loadVehiclesFromFile();
+
+    if (vehicles.empty())
+    {
+        SystemUI::printVehiclesFileIsEmpty();
+        return;
+    }
+
+    SystemUI::printAddedVehicle(vehicles);
+    startSimulation();
 }
 
-void System::handleExit(const int signum) {
-  std::cout << "\033[?25h";
-  exit(signum);
+bool System::isVehiclesFileExists()
+{
+    return fs::exists(vehiclesPath);
 }
 
-void System::hideCursorPosition() { std::cout << "\033[?25l"; }
+void System::createVehiclesFile()
+{
+    std::ofstream file(vehiclesPath);
+}
 
-void System::saveCursorPosition() { std::cout << "\033[s"; }
+void System::loadVehiclesFromFile()
+{
+    std::ifstream file{vehiclesPath};
+    std::string line;
 
-void System::cursorBackAndCleaningBottom() { std::cout << "\033[u\033[J"; }
+    while (getline(file, line))
+    {
+        readFileLine(line);
+    }
+}
+
+void System::readFileLine(const std::string& line)
+{
+    std::stringstream ss(line);
+    std::string name, fuel, type;
+
+    getline(ss, name, ';');
+    getline(ss, fuel, ';');
+    getline(ss, type, ';');
+
+    const double d_fuel(stod(fuel));
+    const int i_type{stoi(type)};
+
+    std::unique_ptr<Vehicle> newVehicle;
+
+    if (static_cast<Vehicle::Type>(i_type) == Vehicle::Type::ElectricVehicle)
+    {
+        newVehicle = std::make_unique<ElectricVehicle>(std::move(name), d_fuel);
+    }
+    else
+    {
+        newVehicle = std::make_unique<CombustionVehicle>(std::move(name), d_fuel);
+    }
+
+    addVehicleToVar(std::move(newVehicle));
+}
+
+void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle)
+{
+    if (vehicle)
+    {
+        vehicles.emplace_back(std::move(vehicle));
+    }
+}
+
+void System::startSimulation()
+{
+    signal(SIGINT, handleExit);
+
+    saveCursorPosition();
+
+    while (true)
+    {
+        cursorBackAndCleaningBottom();
+        SystemUI::printSimulationStartHeader();
+        std::uint8_t isAllOK{1};
+
+        for (auto& vehicle : vehicles)
+        {
+            SystemUI::printTelemetricSimulation(vehicle);
+            vehicle->isOKToStartVehicle();
+
+            if (vehicle->getEngineTemp() >= vehicle->getDangerTemp())
+            {
+                --isAllOK;
+                SystemUI::printDanger(LanguageManager::getText("DANGER_TEMP"));
+            }
+            else if (vehicle->getEngineTemp() >= vehicle->getWarningTemp())
+            {
+                --isAllOK;
+                SystemUI::printWarning(LanguageManager::getText("WARNING_TEMP"));
+            }
+
+            if (vehicle->getFuel() <= Vehicle::getOutOfFuel())
+            {
+                --isAllOK;
+                SystemUI::printInfo(LanguageManager::getText("FINE"));
+            }
+            else if (vehicle->getFuel() <= Vehicle::getLowFuel())
+            {
+                --isAllOK;
+                SystemUI::printWarning(LanguageManager::getText("ALERT"));
+            }
+            else if (vehicle->getFuel() == Vehicle::getOutOfFuel() ||
+                     vehicle->getFuel() <= Vehicle::getMediumFuel())
+            {
+                --isAllOK;
+                SystemUI::printWarning(LanguageManager::getText("MEDIUM_FUEL"));
+            }
+
+            if (isAllOK == 1)
+            {
+                SystemUI::printInfo(LanguageManager::getText("FINE"));
+            }
+            isAllOK = 1;
+            Utils::printNewLine();
+
+            vehicle->updatePhysics();
+        }
+
+        std::cout.flush();
+        Utils::pauseOutputForXSec(2);
+    }
+}
+
+void System::handleExit(const int signum)
+{
+    std::cout << "\033[?25h";
+    exit(signum);
+}
+
+void System::hideCursorPosition()
+{
+    std::cout << "\033[?25l";
+}
+
+void System::saveCursorPosition()
+{
+    std::cout << "\033[s";
+}
+
+void System::cursorBackAndCleaningBottom()
+{
+    std::cout << "\033[u\033[J";
+}

@@ -3,13 +3,14 @@
 #include <unordered_map>
 #include <filesystem>
 
-class LanguageManager {
+class LanguageManager
+{
 public:
     explicit LanguageManager(std::string_view lang);
 
     ~LanguageManager() = default;
 
-    [[nodiscard]] static std::string_view getText(const std::string &key);
+    [[nodiscard]] static std::string_view getText(const std::string& key);
 
 private:
     static constexpr std::string_view enDict{"en"};

@@ -1,6 +1,6 @@
 #pragma once
-#include "SystemUI.h"
 #include "Vehicle.h"
+#include "SystemUI.h"
 #include <filesystem>
 #include <memory>
 #include <vector>
@@ -9,10 +9,10 @@ class System {
 public:
   System();
 
-  void run();
+  void run() ;
 
 private:
-  std::unique_ptr<SystemUI> sysUI;
+    std::unique_ptr<SystemUI> sysUI{nullptr};
   inline static std::vector<std::unique_ptr<Vehicle>> vehicles;
 
   inline static const std::filesystem::path vehiclesPath{DATA_DIR
@@ -28,7 +28,7 @@ private:
 
   inline static void addVehicleToVar(std::unique_ptr<Vehicle> vehicle);
 
-  void startSimulation() const;
+  static void startSimulation() ;
 
   inline static void handleExit(int signum);
 

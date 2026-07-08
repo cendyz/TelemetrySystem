@@ -6,57 +6,61 @@
 #include <string>
 #include <vector>
 
-class SystemUI {
+class SystemUI
+{
 public:
-  SystemUI();
+    SystemUI();
 
-  ~SystemUI() = default;
+    ~SystemUI() = default;
 
-  void printInitializationMessages() const;
+    static void printInitializationMessages();
 
-  void printVehiclesFileIsEmpty() const;
-  void printAddedVehicle(
-      const std::vector<std::unique_ptr<Vehicle>> &vehicles) const;
+    static void printVehiclesFileIsEmpty();
 
-  static void printTelemetricSimulation(const std::unique_ptr<Vehicle> &obj);
+    static void printAddedVehicle(
+        const std::vector<std::unique_ptr<Vehicle> >& vehicles);
 
-  void printSimulationStartHeader() const;
+    static void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj);
+
+    static void printSimulationStartHeader();
 
 
-  static void printInfo(std::string_view msg);
-  static void printWarning(std::string_view msg);
-  static void printDanger(std::string_view msg);
+    static void printInfo(std::string_view msg);
+
+    static void printWarning(std::string_view msg);
+
+    static void printDanger(std::string_view msg);
 
 private:
-  std::unique_ptr<LanguageManager> langManager;
+    std::unique_ptr<LanguageManager> langManager;
 
-  [[nodiscard]] static std::string getSystemLang();
+    [[nodiscard]] static std::string getSystemLang();
 
-  static constexpr std::string_view choseLangInputMsg{
-      "Select the log display language (JP/EN): "};
-  static constexpr std::string_view jpLen{"jp"};
-  static constexpr std::string_view enLen{"en"};
+    static constexpr std::string_view choseLangInputMsg{
+        "Select the log display language (JP/EN): "};
+    static constexpr std::string_view jpLen{"jp"};
+    static constexpr std::string_view enLen{"en"};
 
-  static constexpr std::string_view wrongLangInputMsg{"Invalid command."};
+    static constexpr std::string_view wrongLangInputMsg{"Invalid command."};
 
-  [[nodiscard]] static bool itIsJapaneseLanguage();
+    [[nodiscard]] static bool itIsJapaneseLanguage();
 
-  void setLanguage();
+    void setLanguage();
 
-  inline static const std::array<std::string, 2> systems_k{"S_BOOT", "S_INFO"};
-  inline static const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
+    inline static const std::array<std::string, 2> systems_k{"S_BOOT", "S_INFO"};
+    inline static const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
 
-  inline static int tickNum{1};
+    inline static int tickNum{1};
 
-  inline static void printCarNameInfo(std::string_view name, std::string_view color,
-                        const bool &isOn, double fuel);
+    inline static void printCarNameInfo(std::string_view name, std::string_view color,
+                                        const bool& isOn, double fuel);
 
-  inline static void printIsRunning(bool isOn);
+    inline static void printIsRunning(bool isOn);
 
-  [[nodiscard]] static std::string getArrowMsg( std::string_view msg);
+    [[nodiscard]] static std::string getArrowMsg(std::string_view msg);
 
-  inline static void printEngineTemp(double temp, double warningTemp,
-                       double dangerTemp);
+    inline static void printEngineTemp(double temp, double warningTemp,
+                                       double dangerTemp);
 
-  inline static void printFuel(const std::unique_ptr<Vehicle> &obj) ;
+    inline static void printFuel(const std::unique_ptr<Vehicle>& obj);
 };

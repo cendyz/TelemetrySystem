@@ -1,6 +1,7 @@
 #include "../include/System.h"
 
-int main() {
+int main()
+{
     System sys;
     sys.run();
     return 0;

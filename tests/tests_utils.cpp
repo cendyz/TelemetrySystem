@@ -2,7 +2,8 @@
 #include "../include/Utils.h"
 
 
-TEST(lowerString, isLoweringString) {
+TEST(lowerString, isLoweringString)
+{
     std::string text1{"APPLE"};
     std::string text2{"oR3ANg%"};
     std::string text3{"banana"};
@@ -17,7 +18,8 @@ TEST(lowerString, isLoweringString) {
 }
 
 
-TEST(checkInputLang, IsLangInputCorrect_ValidJapaneseEnglishFormat_ReturnsTrue) {
+TEST(checkInputLang, IsLangInputCorrect_ValidJapaneseEnglishFormat_ReturnsTrue)
+{
     std::string text1{"jp"};
     std::string text2{"jP"};
     std::string text3{"Jp"};
@@ -32,14 +34,15 @@ TEST(checkInputLang, IsLangInputCorrect_ValidJapaneseEnglishFormat_ReturnsTrue) 
     EXPECT_TRUE(Utils::isLangInputCorrect(text2));
     EXPECT_TRUE(Utils::isLangInputCorrect(text3));
     EXPECT_TRUE(Utils::isLangInputCorrect(text4));
-    
+
     EXPECT_TRUE(Utils::isLangInputCorrect(lext1));
     EXPECT_TRUE(Utils::isLangInputCorrect(lext1));
     EXPECT_TRUE(Utils::isLangInputCorrect(lext1));
     EXPECT_TRUE(Utils::isLangInputCorrect(lext1));
 }
 
-TEST(checkInputLang, IsLangInputCorrect_ValidJapaneseEnglishFormat_ReturnsFalse) {
+TEST(checkInputLang, IsLangInputCorrect_ValidJapaneseEnglishFormat_ReturnsFalse)
+{
     std::string text1{"23"};
     std::string text2{"j3"};
     std::string text3{"eNN"};
@@ -49,7 +52,7 @@ TEST(checkInputLang, IsLangInputCorrect_ValidJapaneseEnglishFormat_ReturnsFalse)
     std::string text7{"jp "};
     std::string text8{"j%"};
     std::string text9{""};
-    
+
     EXPECT_FALSE(Utils::isLangInputCorrect(text1));
     EXPECT_FALSE(Utils::isLangInputCorrect(text2));
     EXPECT_FALSE(Utils::isLangInputCorrect(text3));

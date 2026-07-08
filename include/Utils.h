@@ -9,61 +9,83 @@
 #include <string>
 #include <thread>
 
-namespace Utils {
+namespace Utils
+{
 inline std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
 
-inline void pauseOutputForXSec(int &&sec) {
-  std::this_thread::sleep_for(std::chrono::seconds(sec));
+inline void pauseOutputForXSec(int&& sec)
+{
+    std::this_thread::sleep_for(std::chrono::seconds(sec));
 }
 
-template <typename T> void printMessageNewLine(const T &msg) {
-  std::cout << msg << '\n';
+template <typename T> void printMessageNewLine(const T& msg)
+{
+    std::cout << msg << '\n';
 }
 
-inline void printNewLine() { std::cout << '\n'; }
-
-inline void printMessage(const std::string_view msg) { std::cout << msg; }
-
-template <typename T> void printMessageWithSpace(const T &msg) {
-  std::cout << msg << " ";
+inline void printNewLine()
+{
+    std::cout << '\n';
 }
 
-template <typename T>
-void printColorfulMessageNewLine(const T &mess, const std::string_view color) {
-  std::cout << color << mess << COLORS::RESET << '\n';
+inline void printMessage(const std::string_view msg)
+{
+    std::cout << msg;
 }
 
-template <typename T>
-void printColorfulMessage(const T &mess, const std::string_view color) {
-  std::cout << color << mess << COLORS::RESET;
-}
-
-inline void lowerString(std::string &text) {
-  std::ranges::transform(text.begin(), text.end(), text.begin(),
-                         [](const char &c) { return tolower(c); });
-}
-
-[[nodiscard]] inline bool isLangInputCorrect(const std::string &input) {
-  return std::regex_match(input, langInputRegex);
+template <typename T> void printMessageWithSpace(const T& msg)
+{
+    std::cout << msg << " ";
 }
 
 template <typename T>
-void printRow(const std::string_view label, const T &value,
-              const std::string_view color) {
-  std::cout << std::format("{:>20}", label);
-  std::cout << color;
-  if constexpr (std::is_floating_point_v<T>) {
-    std::cout << std::format("{:>7.2f}", value);
-  } else {
-    std::cout << std::format("{:>7}", value);
-  }
-  std::cout << COLORS::RESET << '\n';
+void printColorfulMessageNewLine(const T& mess, const std::string_view color)
+{
+    std::cout << color << mess << COLORS::RESET << '\n';
+}
+
+template <typename T>
+void printColorfulMessage(const T& mess, const std::string_view color)
+{
+    std::cout << color << mess << COLORS::RESET;
+}
+
+inline void lowerString(std::string& text)
+{
+    std::ranges::transform(text.begin(), text.end(), text.begin(),
+                           [](const char& c)
+                           {
+                               return tolower(c);
+                           });
+}
+
+[[nodiscard]] inline bool isLangInputCorrect(const std::string& input)
+{
+    return std::regex_match(input, langInputRegex);
+}
+
+template <typename T>
+void printRow(const std::string_view label, const T& value,
+              const std::string_view color)
+{
+    std::cout << std::format("{:>20}", label);
+    std::cout << color;
+    if constexpr (std::is_floating_point_v<T>)
+    {
+        std::cout << std::format("{:>7.2f}", value);
+    }
+    else
+    {
+        std::cout << std::format("{:>7}", value);
+    }
+    std::cout << COLORS::RESET << '\n';
 }
 
 inline void printLabel(const std::string_view label,
-                       const std::string_view color) {
-  std::cout << "[";
-  printColorfulMessage(label, color);
-  std::cout << "] ";
+                       const std::string_view color)
+{
+    std::cout << "[";
+    printColorfulMessage(label, color);
+    std::cout << "] ";
 }
 } // namespace Utils

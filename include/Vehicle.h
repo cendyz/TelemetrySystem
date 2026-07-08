@@ -2,16 +2,19 @@
 #include <string>
 #include <random>
 
-class Vehicle {
+class Vehicle
+{
 public:
-    enum class Type {
+    enum class Type
+    {
         CombustionVehicle = 1,
         ElectricVehicle = 2
     };
 
 
     Vehicle(std::string name, const double fuel, const Type type)
-        : name(std::move(name)), fuel(fuel), type(type), gen(std::random_device{}()) {
+        : name(std::move(name)), fuel(fuel), type(type), gen(std::random_device{}())
+    {
     }
 
     void isOKToStartVehicle();
@@ -32,23 +35,23 @@ public:
 
     [[nodiscard]] static int getOutOfFuel();
 
-    [[nodiscard]] static int getLowFuel() ;
+    [[nodiscard]] static int getLowFuel();
 
-    [[nodiscard]] static int getMediumFuel() ;
+    [[nodiscard]] static int getMediumFuel();
 
-    [[nodiscard]] static int getHighFuel() ;
+    [[nodiscard]] static int getHighFuel();
 
     [[nodiscard]] static int getWarmedUpEngineTemp();
 
-    [[nodiscard]] int getCooledEnginteTemp() const;
+    [[nodiscard]] static int getCooledEnginteTemp() ;
 
     [[nodiscard]] int getWarningTemp() const;
 
     [[nodiscard]] int getDangerTemp() const;
 
 protected:
-    double warningTemp{};
-    double dangerTemp{};
+    int warningTemp{};
+    int dangerTemp{};
 
 private:
     std::string name;
@@ -61,7 +64,7 @@ private:
     static constexpr int mediumFuel{50};
     static constexpr int highFuel{80};
     static constexpr int warmedUpEngineTemp{80};
-    double cooledEngineTemperature{};
+    static constexpr int cooledEngineTemperature{};
 
     std::uint8_t plusMinus{};
     std::mt19937 gen;

@@ -1,140 +1,177 @@
 #include <Vehicle.h>
 #include <random>
 
-std::string_view Vehicle::getName() const {
+std::string_view Vehicle::getName() const
+{
     return name;
 }
 
-double Vehicle::getFuel() const {
+double Vehicle::getFuel() const
+{
     return fuel;
 }
 
-double Vehicle::getEngineTemp() const {
+double Vehicle::getEngineTemp() const
+{
     return engineTemp;
 }
 
-Vehicle::Type Vehicle::getType() const {
+Vehicle::Type Vehicle::getType() const
+{
     return type;
 }
 
-bool Vehicle::getIsOn() const {
+bool Vehicle::getIsOn() const
+{
     return isOn;
 }
 
-int Vehicle::getOutOfFuel() {
+int Vehicle::getOutOfFuel()
+{
     return outOfFuel;
 }
-int Vehicle::getLowFuel()  {
+
+int Vehicle::getLowFuel()
+{
     return lowFuel;
 }
 
-int Vehicle::getMediumFuel()  {
+int Vehicle::getMediumFuel()
+{
     return mediumFuel;
 }
 
-int Vehicle::getHighFuel()  {
+int Vehicle::getHighFuel()
+{
     return highFuel;
 }
 
-int Vehicle::getWarmedUpEngineTemp() {
+int Vehicle::getWarmedUpEngineTemp()
+{
     return warmedUpEngineTemp;
 }
 
-int Vehicle::getCooledEnginteTemp() const {
+int Vehicle::getCooledEnginteTemp()
+{
     return cooledEngineTemperature;
 }
 
-int Vehicle::getWarningTemp() const {
+int Vehicle::getWarningTemp() const
+{
     return warningTemp;
 }
 
-int Vehicle::getDangerTemp() const {
+int Vehicle::getDangerTemp() const
+{
     return dangerTemp;
 }
 
-void Vehicle::updatePhysics() {
-    if (isOn) {
-        if (engineTemp <= warmedUpEngineTemp) {
+void Vehicle::updatePhysics()
+{
+    if (isOn)
+    {
+        if (engineTemp <= warmedUpEngineTemp)
+        {
             warmingUpTheEngine();
-        } else if (engineTemp >= dangerTemp) {
+        }
+        else if (engineTemp >= dangerTemp)
+        {
             collingCriticEngineTemp();
-        } else if (engineTemp >= warmedUpEngineTemp) {
+        }
+        else if (engineTemp >= warmedUpEngineTemp)
+        {
             engineTemperatureMaintenance();
         }
-    } else if (!isOn && engineTemp >= cooledEngineTemperature) {
+    }
+    else if (!isOn && engineTemp >= cooledEngineTemperature)
+    {
         restingDownTheEngine();
     }
 
-
-    if (fuel > outOfFuel) {
+    if (fuel > outOfFuel)
+    {
         updateFuel();
     }
 }
 
-void Vehicle::isOKToStartVehicle() {
-    if (!isOn && engineTemp < dangerTemp && fuel > outOfFuel) {
+void Vehicle::isOKToStartVehicle()
+{
+    if (!isOn && engineTemp < dangerTemp && fuel > outOfFuel)
+    {
         isOn = true;
     }
 }
 
-double Vehicle::getRandomTemperature() {
+double Vehicle::getRandomTemperature()
+{
     std::uniform_real_distribution<> dist1(3, 11);
     std::uniform_real_distribution<> dist2(2, 12);
-    if (type == Type::ElectricVehicle) {
+    if (type == Type::ElectricVehicle)
+    {
         return dist1(gen);
     }
     return (dist1(gen) + dist2(gen)) / 2;
 }
 
-void Vehicle::warmingUpTheEngine() {
+void Vehicle::warmingUpTheEngine()
+{
     engineTemp += getRandomTemperature();
 }
 
-void Vehicle::restingDownTheEngine() {
+void Vehicle::restingDownTheEngine()
+{
     engineTemp -= getRandomTemperature();
 
-    if (engineTemp <= cooledEngineTemperature) {
+    if (engineTemp <= cooledEngineTemperature)
+    {
         engineTemp = cooledEngineTemperature;
     }
 }
 
-void Vehicle::engineTemperatureMaintenance() {
+void Vehicle::engineTemperatureMaintenance()
+{
     std::uniform_real_distribution<> newTemp(1, 6);
     const double chanceOfCriticalTemperature{newTemp(gen)};
 
-    if (engineTemp >= warningTemp) {
+    if (engineTemp >= warningTemp)
+    {
         plusMinus = 1;
         engineTemp -= newTemp(gen);
     }
 
-    if (!plusMinus) {
-        if (chanceOfCriticalTemperature <= 3) {
+    if (!plusMinus)
+    {
+        if (chanceOfCriticalTemperature <= 3)
+        {
             engineTemp += newTemp(gen) + 30;
-        } else {
+        }
+        else
+        {
             engineTemp += newTemp(gen);
         }
         plusMinus = 1;
-    } else {
+    }
+    else
+    {
         engineTemp -= newTemp(gen);
         plusMinus = 0;
     }
 }
 
-void Vehicle::collingCriticEngineTemp() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
+void Vehicle::collingCriticEngineTemp()
+{
     std::uniform_real_distribution<> dist(2, 7);
 
     engineTemp -= dist(gen);
 }
 
-void Vehicle::updateFuel() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
+void Vehicle::updateFuel()
+{
     std::uniform_real_distribution<> dist(0, 2);
     fuel -= dist(gen);
 
-    if (fuel <= outOfFuel) {
+    if (fuel <= outOfFuel)
+    {
         fuel = outOfFuel;
         isOn = false;
     }
