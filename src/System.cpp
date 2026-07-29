@@ -4,7 +4,6 @@
 #include "Utils.h"
 #include "Vehicle.h"
 #include <CombustionVehicle.h>
-#include <ElectricVehicle.h>
 #include <csignal>
 #include <filesystem>
 #include <fstream>
@@ -23,9 +22,10 @@ System::System()
 
 void System::run()
 {
+    langManager = std::make_unique<LanguageManager>();
     sysUI = std::make_unique<SystemUI>();
     hideCursorPosition();
-    SystemUI::printInitializationMessages();
+    SystemUI::printInitializationMessages(LanguageManager::getSystemsInfo(), LanguageManager::getInitsInfo());
 
     if (!isVehiclesFileExists())
     {
@@ -44,12 +44,12 @@ void System::run()
     startSimulation();
 }
 
-bool System::isVehiclesFileExists()
+bool System::isVehiclesFileExists() const
 {
     return fs::exists(vehiclesPath);
 }
 
-void System::createVehiclesFile()
+void System::createVehiclesFile() const
 {
     std::ofstream file(vehiclesPath);
 }
@@ -99,7 +99,7 @@ void System::addVehicleToVar(std::unique_ptr<Vehicle> vehicle)
     }
 }
 
-void System::startSimulation()
+void System::startSimulation() const
 {
     signal(SIGINT, handleExit);
 
@@ -108,18 +108,18 @@ void System::startSimulation()
     while (true)
     {
         cursorBackAndCleaningBottom();
-        SystemUI::printSimulationStartHeader();
+        sysUI->printSimulationStartHeader();
         std::uint8_t isAllOK{1};
 
-        for (auto& vehicle : vehicles)
+        for (const auto& vehicle : vehicles)
         {
-            SystemUI::printTelemetricSimulation(vehicle);
+            sysUI->printTelemetricSimulation(vehicle);
             vehicle->isOKToStartVehicle();
 
             if (vehicle->getEngineTemp() >= vehicle->getDangerTemp())
             {
                 --isAllOK;
-                SystemUI::printDanger(LanguageManager::getText("DANGER_TEMP"));
+                SystemUI::printDanger();
             }
             else if (vehicle->getEngineTemp() >= vehicle->getWarningTemp())
             {
@@ -130,15 +130,14 @@ void System::startSimulation()
             if (vehicle->getFuel() <= Vehicle::getOutOfFuel())
             {
                 --isAllOK;
-                SystemUI::printInfo(LanguageManager::getText("FINE"));
+                SystemUI::printInfo();
             }
             else if (vehicle->getFuel() <= Vehicle::getLowFuel())
             {
                 --isAllOK;
                 SystemUI::printWarning(LanguageManager::getText("ALERT"));
             }
-            else if (vehicle->getFuel() == Vehicle::getOutOfFuel() ||
-                     vehicle->getFuel() <= Vehicle::getMediumFuel())
+            else if (vehicle->getFuel() == Vehicle::getOutOfFuel() || vehicle->getFuel() <= Vehicle::getMediumFuel())
             {
                 --isAllOK;
                 SystemUI::printWarning(LanguageManager::getText("MEDIUM_FUEL"));
@@ -146,7 +145,7 @@ void System::startSimulation()
 
             if (isAllOK == 1)
             {
-                SystemUI::printInfo(LanguageManager::getText("FINE"));
+                SystemUI::printInfo();
             }
             isAllOK = 1;
             Utils::printNewLine();

@@ -38,14 +38,12 @@ template <typename T> void printMessageWithSpace(const T& msg)
     std::cout << msg << " ";
 }
 
-template <typename T>
-void printColorfulMessageNewLine(const T& mess, const std::string_view color)
+template <typename T> void printColorfulMessageNewLine(const T& mess, const std::string_view color)
 {
     std::cout << color << mess << COLORS::RESET << '\n';
 }
 
-template <typename T>
-void printColorfulMessage(const T& mess, const std::string_view color)
+template <typename T> void printColorfulMessage(const T& mess, const std::string_view color)
 {
     std::cout << color << mess << COLORS::RESET;
 }
@@ -64,9 +62,7 @@ inline void lowerString(std::string& text)
     return std::regex_match(input, langInputRegex);
 }
 
-template <typename T>
-void printRow(const std::string_view label, const T& value,
-              const std::string_view color)
+template <typename T> void printRow(const std::string_view label, const T& value, const std::string_view color)
 {
     std::cout << std::format("{:>20}", label);
     std::cout << color;
@@ -81,8 +77,7 @@ void printRow(const std::string_view label, const T& value,
     std::cout << COLORS::RESET << '\n';
 }
 
-inline void printLabel(const std::string_view label,
-                       const std::string_view color)
+inline void printLabel(const std::string_view label, const std::string_view color)
 {
     std::cout << "[";
     printColorfulMessage(label, color);

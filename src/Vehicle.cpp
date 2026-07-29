@@ -121,11 +121,7 @@ void Vehicle::warmingUpTheEngine()
 void Vehicle::restingDownTheEngine()
 {
     engineTemp -= getRandomTemperature();
-
-    if (engineTemp <= cooledEngineTemperature)
-    {
-        engineTemp = cooledEngineTemperature;
-    }
+    engineTemp = std::max(engineTemp, 0.0);
 }
 
 void Vehicle::engineTemperatureMaintenance()
@@ -139,7 +135,7 @@ void Vehicle::engineTemperatureMaintenance()
         engineTemp -= newTemp(gen);
     }
 
-    if (!plusMinus)
+    if (plusMinus == 0)
     {
         if (chanceOfCriticalTemperature <= 3)
         {

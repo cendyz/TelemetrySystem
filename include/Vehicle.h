@@ -1,16 +1,15 @@
 #pragma once
-#include <string>
 #include <random>
+#include <string>
 
 class Vehicle
 {
-public:
-    enum class Type
+  public:
+    enum class Type : std::uint8_t
     {
         CombustionVehicle = 1,
         ElectricVehicle = 2
     };
-
 
     Vehicle(std::string name, const double fuel, const Type type)
         : name(std::move(name)), fuel(fuel), type(type), gen(std::random_device{}())
@@ -43,17 +42,17 @@ public:
 
     [[nodiscard]] static int getWarmedUpEngineTemp();
 
-    [[nodiscard]] static int getCooledEnginteTemp() ;
+    [[nodiscard]] static int getCooledEnginteTemp();
 
     [[nodiscard]] int getWarningTemp() const;
 
     [[nodiscard]] int getDangerTemp() const;
 
-protected:
+  protected:
     int warningTemp{};
     int dangerTemp{};
 
-private:
+  private:
     std::string name;
     double fuel{};
     double engineTemp{};

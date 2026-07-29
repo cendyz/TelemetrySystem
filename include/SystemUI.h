@@ -8,59 +8,34 @@
 
 class SystemUI
 {
-public:
-    SystemUI();
+  public:
+    static void printInitializationMessages(const std::array<std::string, 2>& systems,
+                                            const std::array<std::string, 2>& inits);
 
-    ~SystemUI() = default;
+    static void printVehiclesFileIsEmpty() ;
 
-    static void printInitializationMessages();
+    static void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>>& vehicles) ;
 
-    static void printVehiclesFileIsEmpty();
+    static void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj) ;
 
-    static void printAddedVehicle(
-        const std::vector<std::unique_ptr<Vehicle> >& vehicles);
+    void printSimulationStartHeader();
 
-    static void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj);
+    static void printInfo() ;
 
-    static void printSimulationStartHeader();
+    static void printWarning(std::string_view msg) ;
 
+    static void printDanger() ;
 
-    static void printInfo(std::string_view msg);
+  private:
+    int tickNum{1};
 
-    static void printWarning(std::string_view msg);
+    static void printCarNameInfo(std::string_view name, std::string_view color, const bool& isOn, double fuel) ;
 
-    static void printDanger(std::string_view msg);
+    static void printIsRunning(bool isOn) ;
 
-private:
-    std::unique_ptr<LanguageManager> langManager;
+    [[nodiscard]] static std::string getArrowMsg(std::string_view msg) ;
 
-    [[nodiscard]] static std::string getSystemLang();
+    static void printEngineTemp(double temp, double warningTemp, double dangerTemp) ;
 
-    static constexpr std::string_view choseLangInputMsg{
-        "Select the log display language (JP/EN): "};
-    static constexpr std::string_view jpLen{"jp"};
-    static constexpr std::string_view enLen{"en"};
-
-    static constexpr std::string_view wrongLangInputMsg{"Invalid command."};
-
-    [[nodiscard]] static bool itIsJapaneseLanguage();
-
-    void setLanguage();
-
-    inline static const std::array<std::string, 2> systems_k{"S_BOOT", "S_INFO"};
-    inline static const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
-
-    inline static int tickNum{1};
-
-    inline static void printCarNameInfo(std::string_view name, std::string_view color,
-                                        const bool& isOn, double fuel);
-
-    inline static void printIsRunning(bool isOn);
-
-    [[nodiscard]] static std::string getArrowMsg(std::string_view msg);
-
-    inline static void printEngineTemp(double temp, double warningTemp,
-                                       double dangerTemp);
-
-    inline static void printFuel(const std::unique_ptr<Vehicle>& obj);
+    static void printFuel(const std::unique_ptr<Vehicle>& obj) ;
 };

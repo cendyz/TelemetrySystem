@@ -6,9 +6,15 @@
 #include <sstream>
 namespace fs = std::filesystem;
 
-LanguageManager::LanguageManager(const std::string_view lang)
+LanguageManager::LanguageManager()
 {
-    if (lang == jpDict)
+    setLanguage();
+    loadDict();
+}
+
+void LanguageManager::setLanguage()
+{
+    if (itIsJapaneseLanguage())
     {
         dictsPath += std::string(jpDict) + fileType.data();
     }
@@ -16,10 +22,28 @@ LanguageManager::LanguageManager(const std::string_view lang)
     {
         dictsPath += std::string(enDict) + fileType.data();
     }
-    loadDict();
 }
 
-void LanguageManager::loadDict()
+bool LanguageManager::itIsJapaneseLanguage()
+{
+    return getSystemLang() == jpDict;
+}
+std::string LanguageManager::getSystemLang()
+{
+    std::string input;
+    while (true)
+    {
+        Utils::printMessage(choseLangInputMsg);
+        getline(std::cin, input);
+        if (Utils::isLangInputCorrect(input))
+        {
+            Utils::lowerString(input);
+            return input;
+        }
+        Utils::printColorfulMessageNewLine(wrongLangInputMsg, COLORS::RED);
+    }
+}
+void LanguageManager::loadDict() const
 {
     std::ifstream dict{dictsPath};
 
@@ -37,6 +61,20 @@ void LanguageManager::loadDict()
     }
 }
 
+std::array<std::string, 2> LanguageManager::getInitsInfo()
+{
+    return inits_k;
+}
+
+std::array<std::string, 2> LanguageManager::getSystemsInfo()
+{
+    return systems_k;
+}
+
+std::string_view LanguageManager::getText(const std::string&& key)
+{
+    return dictionary.at(key);
+}
 std::string_view LanguageManager::getText(const std::string& key)
 {
     return dictionary.at(key);
