@@ -14,7 +14,7 @@ namespace Utils
 inline std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
 
 inline volatile std::sig_atomic_t interrupted{0};
-void pauseOutputForXSec(int&& sec);
+void pauseOutputForOneSec();
 
 template <typename T> void printMessageNewLine(const T& msg)
 {

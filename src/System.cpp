@@ -154,7 +154,7 @@ void System::startSimulation() const
         }
 
         std::cout.flush();
-        Utils::pauseOutputForXSec(1);
+        Utils::pauseOutputForOneSec();
     }
     std::cout << "\033[?25h";
     exit(0);

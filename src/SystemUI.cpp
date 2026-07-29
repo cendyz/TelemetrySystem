@@ -12,7 +12,7 @@ void SystemUI::printInitializationMessages(const std::array<std::string, 2>& sys
     {
         Utils::printLabel(LanguageManager::getText(systems[i]), COLORS::YELLOW);
         Utils::printMessageNewLine(LanguageManager::getText(inits[i]));
-        Utils::pauseOutputForXSec(1);
+        Utils::pauseOutputForOneSec();
     }
 }
 
@@ -37,7 +37,7 @@ void SystemUI::printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>>& ve
             Utils::printColorfulMessageNewLine(vehicle->getName(), COLORS::MAGNETA);
         }
 
-        Utils::pauseOutputForXSec(1);
+        Utils::pauseOutputForOneSec();
     }
 }
 

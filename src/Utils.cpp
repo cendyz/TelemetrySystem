@@ -1,10 +1,10 @@
 #include "Utils.h"
 
-void Utils::pauseOutputForXSec(int&& sec)
+void Utils::pauseOutputForOneSec()
 {
     for (size_t i{}; i < 100 && interrupted == 0; ++i)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(sec));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
