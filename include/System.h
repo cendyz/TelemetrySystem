@@ -1,4 +1,6 @@
 #pragma once
+#include "LanguageManager.h"
+#include "SystemUI.h"
 #include "Vehicle.h"
 #include <filesystem>
 #include <memory>
@@ -11,6 +13,8 @@ class System
     void run();
 
   private:
+    std::unique_ptr<LanguageManager> lngManager{nullptr};
+    std::unique_ptr<SystemUI> sysUI{nullptr};
     std::vector<std::unique_ptr<Vehicle>> vehicles;
 
     const std::filesystem::path vehiclesPath{DATA_DIR "vehicles.csv"};

@@ -22,10 +22,11 @@ System::System()
 
 void System::run()
 {
-    LanguageManager::setLanguage();
-    LanguageManager::loadDict();
+    lngManager = std::make_unique<LanguageManager>();
+    sysUI = std::make_unique<SystemUI>();
+
     hideCursorPosition();
-    SystemUI::printInitializationMessages(LanguageManager::getSystemsInfo(), LanguageManager::getInitsInfo());
+    SystemUI::printInitializationMessages(lngManager->getSystemsInfo(), lngManager->getInitsInfo());
 
     if (!isVehiclesFileExists())
     {
@@ -108,7 +109,7 @@ void System::startSimulation() const
     while (Utils::interrupted == 0)
     {
         cursorBackAndCleaningBottom();
-        SystemUI::printSimulationStartHeader();
+        sysUI->printSimulationStartHeader();
         std::uint8_t isAllOK{1};
 
         for (const auto& vehicle : vehicles)

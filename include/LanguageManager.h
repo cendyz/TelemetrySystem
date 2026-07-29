@@ -1,32 +1,40 @@
 #pragma once
 #include <array>
 #include <filesystem>
+#include <regex>
 #include <string>
 #include <unordered_map>
 
-namespace LanguageManager
+class LanguageManager
 {
-[[nodiscard]] std::string_view getText(const std::string& key);
-[[nodiscard]] std::array<std::string, 2> getSystemsInfo();
-[[nodiscard]] std::array<std::string, 2> getInitsInfo();
+  public:
+    LanguageManager();
 
-void setLanguage();
-[[nodiscard]] bool itIsJapaneseLanguage();
-[[nodiscard]] std::string getSystemLang();
+    [[nodiscard]] static std::string_view getText(const std::string& key);
+    [[nodiscard]] std::array<std::string, 2> getSystemsInfo() const;
+    [[nodiscard]] std::array<std::string, 2> getInitsInfo() const;
 
-constexpr std::string_view enDict{"en"};
-constexpr std::string_view jpDict{"jp"};
+    void setLanguage();
+    [[nodiscard]] bool itIsJapaneseLanguage() const;
+    [[nodiscard]] std::string getSystemLang() const;
 
-constexpr std::string_view choseLangInputMsg{"Select the log display language (JP/EN): "};
-constexpr std::string_view wrongLangInputMsg{"Invalid command."};
+  private:
+    const std::string_view enDict{"en"};
+    const std::string_view jpDict{"jp"};
 
-inline const std::array<std::string, 2> systems_k{"S_BOOT", "S_INFO"};
-inline const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
+    std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
+    [[nodiscard]] bool isLangInputCorrect(const std::string& input) const;
 
-inline std::unordered_map<std::string, std::string> dictionary;
+    const std::string_view choseLangInputMsg{"Select the log display language (JP/EN): "};
+    const std::string_view wrongLangInputMsg{"Invalid command."};
 
-inline std::filesystem::path dictsPath{DATA_DIR};
-constexpr std::string_view fileType{".txt"};
+    const std::array<std::string, 2> systems_k{"S_BOOT", "S_INFO"};
+    const std::array<std::string, 2> inits_k{"INIT", "LANG_L"};
 
-void loadDict();
-}; // namespace LanguageManager
+    inline static std::unordered_map<std::string, std::string> dictionary{};
+
+    std::filesystem::path dictsPath{DATA_DIR};
+    std::string_view fileType{".txt"};
+
+    void loadDict() const;
+};

@@ -1,19 +1,17 @@
 #pragma once
-
 #include "Colors.h"
 #include <chrono>
 #include <csignal>
 #include <format>
 #include <iostream>
-#include <regex>
 #include <string>
 #include <thread>
 
 namespace Utils
 {
-inline std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
 
 inline volatile std::sig_atomic_t interrupted{0};
+
 void pauseOutputForOneSec();
 
 template <typename T> void printMessageNewLine(const T& msg)
@@ -41,8 +39,6 @@ template <typename T> void printColorfulMessage(const T& mess, const std::string
 }
 
 void lowerString(std::string& text);
-
-[[nodiscard]] bool isLangInputCorrect(const std::string& input);
 
 template <typename T> void printRow(const std::string_view label, const T& value, const std::string_view color)
 {

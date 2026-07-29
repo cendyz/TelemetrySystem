@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include <algorithm>
 
 void Utils::pauseOutputForOneSec()
 {
@@ -25,11 +26,6 @@ void Utils::lowerString(std::string& text)
                            {
                                return tolower(c);
                            });
-}
-
-bool Utils::isLangInputCorrect(const std::string& input)
-{
-    return std::regex_match(input, langInputRegex);
 }
 
 void Utils::printLabel(const std::string_view label, const std::string_view color)

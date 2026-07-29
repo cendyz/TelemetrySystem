@@ -106,7 +106,7 @@ void SystemUI::printFuel(const std::unique_ptr<Vehicle>& obj)
     {
         color = COLORS::RED;
     }
-    else if (obj->getFuel() > Vehicle::getMediumFuel() && obj->getFuel() <= Vehicle::getMediumFuel())
+    else if (obj->getFuel() > Vehicle::getLowFuel() && obj->getFuel() <= Vehicle::getMediumFuel())
     {
         color = COLORS::L_YELLOW;
     }

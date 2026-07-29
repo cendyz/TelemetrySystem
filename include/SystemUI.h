@@ -5,36 +5,36 @@
 #include <string>
 #include <vector>
 
-namespace SystemUI
+class SystemUI
 {
-void printInitializationMessages(const std::array<std::string, 2>& systems, const std::array<std::string, 2>& inits);
+  public:
+    static void printInitializationMessages(const std::array<std::string, 2>& systems,
+                                            const std::array<std::string, 2>& inits);
 
-void printVehiclesFileIsEmpty();
+    static void printVehiclesFileIsEmpty();
 
-void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>>& vehicles);
+    static void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>>& vehicles);
 
-void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj);
+    static void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj);
 
-void printSimulationStartHeader();
+    void printSimulationStartHeader();
 
-void printInfo();
+    static void printInfo();
 
-void printWarning(std::string_view msg);
+    static void printWarning(std::string_view msg);
 
-void printDanger();
+    static void printDanger();
 
-inline int tickNum{1};
+  private:
+    int tickNum{1};
 
-[[nodiscard]] std::string_view pickColorForThreshold(double val, int low, int medium, int high);
+    static void printCarNameInfo(std::string_view name, std::string_view color, const bool& isOn, double fuel);
 
-void printCarNameInfo(std::string_view name, std::string_view color, const bool& isOn, double fuel);
+    static void printIsRunning(bool isOn);
 
-void printIsRunning(bool isOn);
+    [[nodiscard]] static std::string getArrowMsg(std::string_view msg);
 
-[[nodiscard]] std::string getArrowMsg(std::string_view msg);
+    static void printEngineTemp(double temp, double warningTemp, double dangerTemp);
 
-void printEngineTemp(double temp, double warningTemp, double dangerTemp);
-
-void printFuel(const std::unique_ptr<Vehicle>& obj);
-
-}; // namespace SystemUI
+    static void printFuel(const std::unique_ptr<Vehicle>& obj);
+};
