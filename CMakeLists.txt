@@ -20,6 +20,7 @@ add_library(CoreLogic
         src/SystemUI.cpp
         src/LanguageManager.cpp
         src/Vehicle.cpp
+        src/Utils.cpp
 )
 target_include_directories(CoreLogic PUBLIC include)
 

@@ -1,41 +1,40 @@
 #pragma once
-#include "LanguageManager.h"
 #include "Vehicle.h"
 #include <array>
 #include <memory>
 #include <string>
 #include <vector>
 
-class SystemUI
+namespace SystemUI
 {
-  public:
-    static void printInitializationMessages(const std::array<std::string, 2>& systems,
-                                            const std::array<std::string, 2>& inits);
+void printInitializationMessages(const std::array<std::string, 2>& systems, const std::array<std::string, 2>& inits);
 
-    static void printVehiclesFileIsEmpty() ;
+void printVehiclesFileIsEmpty();
 
-    static void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>>& vehicles) ;
+void printAddedVehicle(const std::vector<std::unique_ptr<Vehicle>>& vehicles);
 
-    static void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj) ;
+void printTelemetricSimulation(const std::unique_ptr<Vehicle>& obj);
 
-    void printSimulationStartHeader();
+void printSimulationStartHeader();
 
-    static void printInfo() ;
+void printInfo();
 
-    static void printWarning(std::string_view msg) ;
+void printWarning(std::string_view msg);
 
-    static void printDanger() ;
+void printDanger();
 
-  private:
-    int tickNum{1};
+inline int tickNum{1};
 
-    static void printCarNameInfo(std::string_view name, std::string_view color, const bool& isOn, double fuel) ;
+[[nodiscard]] std::string_view pickColorForThreshold(double val, int low, int medium, int high);
 
-    static void printIsRunning(bool isOn) ;
+void printCarNameInfo(std::string_view name, std::string_view color, const bool& isOn, double fuel);
 
-    [[nodiscard]] static std::string getArrowMsg(std::string_view msg) ;
+void printIsRunning(bool isOn);
 
-    static void printEngineTemp(double temp, double warningTemp, double dangerTemp) ;
+[[nodiscard]] std::string getArrowMsg(std::string_view msg);
 
-    static void printFuel(const std::unique_ptr<Vehicle>& obj) ;
-};
+void printEngineTemp(double temp, double warningTemp, double dangerTemp);
+
+void printFuel(const std::unique_ptr<Vehicle>& obj);
+
+}; // namespace SystemUI

@@ -1,10 +1,11 @@
 #include "../include/System.h"
 #include "Colors.h"
 #include "ElectricVehicle.h"
+#include "LanguageManager.h"
+#include "SystemUI.h"
 #include "Utils.h"
 #include "Vehicle.h"
 #include <CombustionVehicle.h>
-#include <csignal>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -12,7 +13,6 @@
 #include <random>
 #include <sstream>
 #include <windows.h>
-namespace fs = std::filesystem;
 
 System::System()
 {
@@ -22,8 +22,8 @@ System::System()
 
 void System::run()
 {
-    langManager = std::make_unique<LanguageManager>();
-    sysUI = std::make_unique<SystemUI>();
+    LanguageManager::setLanguage();
+    LanguageManager::loadDict();
     hideCursorPosition();
     SystemUI::printInitializationMessages(LanguageManager::getSystemsInfo(), LanguageManager::getInitsInfo());
 
@@ -46,7 +46,7 @@ void System::run()
 
 bool System::isVehiclesFileExists() const
 {
-    return fs::exists(vehiclesPath);
+    return std::filesystem::exists(vehiclesPath);
 }
 
 void System::createVehiclesFile() const
@@ -105,15 +105,15 @@ void System::startSimulation() const
 
     saveCursorPosition();
 
-    while (true)
+    while (Utils::interrupted == 0)
     {
         cursorBackAndCleaningBottom();
-        sysUI->printSimulationStartHeader();
+        SystemUI::printSimulationStartHeader();
         std::uint8_t isAllOK{1};
 
         for (const auto& vehicle : vehicles)
         {
-            sysUI->printTelemetricSimulation(vehicle);
+            SystemUI::printTelemetricSimulation(vehicle);
             vehicle->isOKToStartVehicle();
 
             if (vehicle->getEngineTemp() >= vehicle->getDangerTemp())
@@ -154,14 +154,15 @@ void System::startSimulation() const
         }
 
         std::cout.flush();
-        Utils::pauseOutputForXSec(2);
+        Utils::pauseOutputForXSec(1);
     }
+    std::cout << "\033[?25h";
+    exit(0);
 }
 
 void System::handleExit(const int signum)
 {
-    std::cout << "\033[?25h";
-    exit(signum);
+    Utils::interrupted = 1;
 }
 
 void System::hideCursorPosition()

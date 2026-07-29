@@ -1,7 +1,7 @@
 #include <Vehicle.h>
 #include <random>
 
-std::string_view Vehicle::getName() const
+std::string_view Vehicle::getName()
 {
     return name;
 }
@@ -51,7 +51,7 @@ int Vehicle::getWarmedUpEngineTemp()
     return warmedUpEngineTemp;
 }
 
-int Vehicle::getCooledEnginteTemp()
+int Vehicle::getCooledEngineTemp()
 {
     return cooledEngineTemperature;
 }
@@ -127,17 +127,16 @@ void Vehicle::restingDownTheEngine()
 void Vehicle::engineTemperatureMaintenance()
 {
     std::uniform_real_distribution<> newTemp(1, 6);
-    const double chanceOfCriticalTemperature{newTemp(gen)};
 
     if (engineTemp >= warningTemp)
     {
-        plusMinus = 1;
         engineTemp -= newTemp(gen);
+        return;
     }
 
     if (plusMinus == 0)
     {
-        if (chanceOfCriticalTemperature <= 3)
+        if (const double chanceOfCriticalTemperature{newTemp(gen)}; chanceOfCriticalTemperature <= 3)
         {
             engineTemp += newTemp(gen) + 30;
         }

@@ -6,12 +6,6 @@
 #include <sstream>
 namespace fs = std::filesystem;
 
-LanguageManager::LanguageManager()
-{
-    setLanguage();
-    loadDict();
-}
-
 void LanguageManager::setLanguage()
 {
     if (itIsJapaneseLanguage())
@@ -43,7 +37,7 @@ std::string LanguageManager::getSystemLang()
         Utils::printColorfulMessageNewLine(wrongLangInputMsg, COLORS::RED);
     }
 }
-void LanguageManager::loadDict() const
+void LanguageManager::loadDict()
 {
     std::ifstream dict{dictsPath};
 
@@ -71,10 +65,6 @@ std::array<std::string, 2> LanguageManager::getSystemsInfo()
     return systems_k;
 }
 
-std::string_view LanguageManager::getText(const std::string&& key)
-{
-    return dictionary.at(key);
-}
 std::string_view LanguageManager::getText(const std::string& key)
 {
     return dictionary.at(key);

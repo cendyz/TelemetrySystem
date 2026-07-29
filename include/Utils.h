@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Colors.h"
-#include <algorithm>
 #include <chrono>
+#include <csignal>
 #include <format>
 #include <iostream>
 #include <regex>
@@ -13,25 +13,17 @@ namespace Utils
 {
 inline std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
 
-inline void pauseOutputForXSec(int&& sec)
-{
-    std::this_thread::sleep_for(std::chrono::seconds(sec));
-}
+inline volatile std::sig_atomic_t interrupted{0};
+void pauseOutputForXSec(int&& sec);
 
 template <typename T> void printMessageNewLine(const T& msg)
 {
     std::cout << msg << '\n';
 }
 
-inline void printNewLine()
-{
-    std::cout << '\n';
-}
+void printNewLine();
 
-inline void printMessage(const std::string_view msg)
-{
-    std::cout << msg;
-}
+void printMessage(std::string_view msg);
 
 template <typename T> void printMessageWithSpace(const T& msg)
 {
@@ -48,19 +40,9 @@ template <typename T> void printColorfulMessage(const T& mess, const std::string
     std::cout << color << mess << COLORS::RESET;
 }
 
-inline void lowerString(std::string& text)
-{
-    std::ranges::transform(text.begin(), text.end(), text.begin(),
-                           [](const char& c)
-                           {
-                               return tolower(c);
-                           });
-}
+void lowerString(std::string& text);
 
-[[nodiscard]] inline bool isLangInputCorrect(const std::string& input)
-{
-    return std::regex_match(input, langInputRegex);
-}
+[[nodiscard]] bool isLangInputCorrect(const std::string& input);
 
 template <typename T> void printRow(const std::string_view label, const T& value, const std::string_view color)
 {
@@ -77,10 +59,5 @@ template <typename T> void printRow(const std::string_view label, const T& value
     std::cout << COLORS::RESET << '\n';
 }
 
-inline void printLabel(const std::string_view label, const std::string_view color)
-{
-    std::cout << "[";
-    printColorfulMessage(label, color);
-    std::cout << "] ";
-}
+void printLabel(std::string_view label, std::string_view color);
 } // namespace Utils

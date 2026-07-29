@@ -22,31 +22,31 @@ class Vehicle
 
     virtual ~Vehicle() = default;
 
-    [[nodiscard]] std::string_view getName() const;
+    [[nodiscard]] std::string_view getName() ;
 
-    [[nodiscard]] double getFuel() const;
+    [[nodiscard]] double getFuel() const ;
 
-    [[nodiscard]] double getEngineTemp() const;
+    [[nodiscard]] double getEngineTemp() const ;
 
     [[nodiscard]] Type getType() const;
 
-    [[nodiscard]] bool getIsOn() const;
+    [[nodiscard]] bool getIsOn() const ;
 
     [[nodiscard]] static int getOutOfFuel();
 
-    [[nodiscard]] static int getLowFuel();
+    [[nodiscard]] int static getLowFuel();
 
-    [[nodiscard]] static int getMediumFuel();
+    [[nodiscard]] int static getMediumFuel();
 
     [[nodiscard]] static int getHighFuel();
 
     [[nodiscard]] static int getWarmedUpEngineTemp();
 
-    [[nodiscard]] static int getCooledEnginteTemp();
+    [[nodiscard]] static int getCooledEngineTemp();
 
-    [[nodiscard]] int getWarningTemp() const;
+    [[nodiscard]] int getWarningTemp() const ;
 
-    [[nodiscard]] int getDangerTemp() const;
+    [[nodiscard]] int getDangerTemp() const ;
 
   protected:
     int warningTemp{};
