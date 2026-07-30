@@ -36,6 +36,7 @@ include(GoogleTest)
 
 add_executable(tests
         tests/tests_utils.cpp
+        tests/LanguageManagerTests.cpp
 )
 
 target_link_libraries(tests PRIVATE GTest::gtest_main CoreLogic)

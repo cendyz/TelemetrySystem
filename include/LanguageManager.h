@@ -18,12 +18,18 @@ class LanguageManager
     [[nodiscard]] bool itIsJapaneseLanguage() const;
     [[nodiscard]] std::string getSystemLang() const;
 
+  protected:
+    struct NotInitTag
+    {
+    };
+    explicit LanguageManager(NotInitTag /*unused*/) {}
+    [[nodiscard]] bool isLangInputCorrect(const std::string& input) const;
+
   private:
     const std::string_view enDict{"en"};
     const std::string_view jpDict{"jp"};
 
     std::regex langInputRegex{"^(jp|en)$", std::regex::icase};
-    [[nodiscard]] bool isLangInputCorrect(const std::string& input) const;
 
     const std::string_view choseLangInputMsg{"Select the log display language (JP/EN): "};
     const std::string_view wrongLangInputMsg{"Invalid command."};
