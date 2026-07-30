@@ -35,7 +35,7 @@ enable_testing()
 include(GoogleTest)
 
 add_executable(tests
-        tests/tests_utils.cpp
+        tests/UtilsTests.cpp
         tests/LanguageManagerTests.cpp
 )
 
