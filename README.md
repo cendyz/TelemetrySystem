@@ -35,7 +35,7 @@ cmake -S . -B build
 4. Compile the project.
 
 ```bash
-cmake --build ./build --target system
+cmake --build ./build
 ```
 
 5. Run project.
@@ -43,6 +43,8 @@ cmake --build ./build --target system
 ```bash
 cd build/Debug
 ./system
+## For tests:
+./tests
 ```
 For the best experience, run the system in a cleared, maximized terminal.
 
