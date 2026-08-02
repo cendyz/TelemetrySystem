@@ -1,6 +1,6 @@
 
 <h1 align="center">
-  <img src="images/terminal.png" alt="Terminal icon" width="137" height="128" align="center" style="z-index: 10000;" />
+  <img src="images/icon.png" alt="https://www.flaticon.com/free-icon/vehicles_4856556" width="137" height="128" align="center" style="z-index: 10000;" />
   Telemetry and Vehicle Fleet Simulation System
 </h1>
 
